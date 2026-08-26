@@ -1,0 +1,14 @@
+# Minimal dependency set to run the dashboard end-to-end with fallback models
+# (VADER sentiment + TF-IDF/KMeans topics). This is the recommended, fast,
+# network-light path used by the Cloud Agent environment. For the full
+# BERTopic + transformer-sentiment pipeline, install the extras listed in
+# requirements.txt instead.
+streamlit>=1.30
+streamlit-autorefresh>=1.0
+pandas>=2.0
+numpy>=1.24
+plotly>=5.18
+scikit-learn>=1.3
+vaderSentiment>=3.3
+wordcloud>=1.9
+matplotlib>=3.7

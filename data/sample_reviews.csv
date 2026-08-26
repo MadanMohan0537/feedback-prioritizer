@@ -1,0 +1,651 @@
+timestamp,text,source,rating,true_topic
+2026-08-11 18:20:26,"Got double charged after upgrading my plan, need a refund immediately.",google_play,1,billing_payments
+2026-08-12 03:59:24,The tutorial doesn't explain how to invite team members.,google_play,3,onboarding
+2026-08-12 10:25:15,My data didn't sync across devices and I lost a week of work.,app_store,2,data_sync
+2026-08-12 14:51:25,Still waiting on a reply to my ticket from last week.,google_play,3,customer_support
+2026-08-12 16:43:32,Subject: Issue report. Can you add a dark mode option please?,support_ticket,3,feature_requests
+2026-08-13 02:00:22,Support rep was rude and unhelpful when I asked for a refund.,app_store,4,customer_support
+2026-08-13 03:07:57,Crashes whenever I try to attach a file to a task.,in_app_survey,2,crashes_stability
+2026-08-13 04:17:09,Would be nice to have recurring task templates.,app_store,3,feature_requests
+2026-08-13 05:37:34,"@TaskFlowApp Navigation is unintuitive, took me forever to find my projects.",twitter,2,ui_ux
+2026-08-13 05:42:08,"Really clean and minimal design, easy to use.",google_play,3,ui_ux
+2026-08-13 14:51:11,"Got double charged after upgrading my plan, need a refund immediately.",app_store,2,billing_payments
+2026-08-13 16:38:48,"This app has completely changed how my team manages projects, love it.",google_play,5,general_positive
+2026-08-13 16:54:28,"Sync between desktop and mobile is unreliable, tasks go missing.",google_play,1,data_sync
+2026-08-13 19:31:34,"It froze and then crashed while syncing, very frustrating.",google_play,1,crashes_stability
+2026-08-13 23:00:45,"Simple, reliable, and does exactly what I need.",in_app_survey,5,general_positive
+2026-08-14 01:09:36,"Font is too small on mobile, hard to read.",google_play,2,ui_ux
+2026-08-14 05:16:14,The app keeps crashing every time I try to open the dashboard.,support_ticket,2,crashes_stability
+2026-08-14 05:48:50,The tutorial doesn't explain how to invite team members.,in_app_survey,4,onboarding
+2026-08-14 13:11:11,The app keeps crashing every time I try to open the dashboard.,google_play,1,crashes_stability
+2026-08-14 13:21:03,"Simple, reliable, and does exactly what I need.",in_app_survey,5,general_positive
+2026-08-14 14:33:50,Subject: Issue report. Everything lags when I have more than 50 items in a list.,support_ticket,2,performance_speed
+2026-08-14 15:10:43,"Subject: Issue report. Overcharged on my credit card, this is unacceptable.",support_ticket,1,billing_payments
+2026-08-14 16:47:59,"The new UI is confusing, I can't find the settings anymore.",in_app_survey,3,ui_ux
+2026-08-14 18:03:43,"Lost my data after the app crashed during a sync, need this fixed.",app_store,1,data_sync
+2026-08-14 20:16:55,"@TaskFlowApp Getting locked out of my account randomly, this is concerning.",twitter,1,security_login
+2026-08-14 23:40:14,I wish there was a way to export my tasks to PDF.,in_app_survey,4,feature_requests
+2026-08-15 02:22:00,"App crashes on launch since the last update, completely unusable.",support_ticket,1,crashes_stability
+2026-08-15 03:53:53,Would be nice to have recurring task templates.,google_play,3,feature_requests
+2026-08-15 09:12:56,"Best productivity app I've used in years, highly recommend.",google_play,5,general_positive
+2026-08-15 09:31:01,"Best productivity app I've used in years, highly recommend.",app_store,5,general_positive
+2026-08-15 11:03:17,Loading spinner just spins forever on the reports page.,in_app_survey,1,performance_speed
+2026-08-15 13:28:05,"@TaskFlowApp Login now works great with Face ID, very convenient.",twitter,5,security_login
+2026-08-15 14:28:29,Subject: Issue report. Any plans to add a native mobile widget?,support_ticket,4,feature_requests
+2026-08-15 14:32:50,"Five stars, this has saved me so much time every week.",in_app_survey,5,general_positive
+2026-08-15 14:46:26,"@TaskFlowApp Used to crash constantly, but the latest update fixed it for me.",twitter,2,crashes_stability
+2026-08-15 16:34:05,It would be great if we could assign tasks to multiple people.,support_ticket,5,feature_requests
+2026-08-15 19:22:03,"Real-time sync is great, changes show up instantly on all my devices.",app_store,5,data_sync
+2026-08-15 21:29:35,"hey @TaskFlowApp Love the redesign, it looks so much cleaner now.",twitter,5,ui_ux
+2026-08-15 23:43:58,I wish there was a way to export my tasks to PDF.,support_ticket,2,feature_requests
+2026-08-15 23:49:51,"@TaskFlowApp Great value for the price, worth every penny.",twitter,5,general_positive
+2026-08-16 00:01:05,The pricing page doesn't match what I was actually billed.,google_play,2,billing_payments
+2026-08-16 00:39:28,"Simple, reliable, and does exactly what I need.",app_store,4,general_positive
+2026-08-16 02:16:16,Finally sync works flawlessly across all my devices now.,app_store,3,data_sync
+2026-08-16 04:17:33,"Really clean and minimal design, easy to use.",google_play,2,ui_ux
+2026-08-16 05:35:11,It would be great if we could assign tasks to multiple people.,google_play,5,feature_requests
+2026-08-16 07:12:24,Loved the guided walkthrough for new users.,app_store,5,onboarding
+2026-08-16 08:29:16,Please add support for Slack notifications.,app_store,3,feature_requests
+2026-08-16 08:55:28,"Support fixed my billing issue quickly, thank you.",in_app_survey,1,billing_payments
+2026-08-16 11:56:53,Support rep was rude and unhelpful when I asked for a refund.,app_store,3,customer_support
+2026-08-16 12:00:37,I wish there was a way to export my tasks to PDF.,in_app_survey,3,feature_requests
+2026-08-16 12:02:10,"Overcharged on my credit card, this is unacceptable.",app_store,1,billing_payments
+2026-08-16 12:07:41,"Onboarding was smooth, got set up in under five minutes.",google_play,2,onboarding
+2026-08-16 13:10:35,"Stability has gotten so much better, no crashes in weeks!",in_app_survey,2,crashes_stability
+2026-08-16 15:21:56,TaskFlow crashed twice today and I lost my unsaved notes.,app_store,1,crashes_stability
+2026-08-16 15:45:51,The pricing page doesn't match what I was actually billed.,google_play,1,billing_payments
+2026-08-16 16:30:49,"Constant crashing on my Android phone, please fix this ASAP.",app_store,1,crashes_stability
+2026-08-16 16:41:44,The search feature is slow and often times out.,google_play,2,performance_speed
+2026-08-16 17:15:35,Support team was super helpful and resolved my issue in minutes.,in_app_survey,3,customer_support
+2026-08-16 17:51:09,"Real-time sync is great, changes show up instantly on all my devices.",app_store,4,data_sync
+2026-08-16 19:43:07,"Getting locked out of my account randomly, this is concerning.",google_play,2,security_login
+2026-08-16 21:39:03,TaskFlow crashed twice today and I lost my unsaved notes.,google_play,1,crashes_stability
+2026-08-16 21:43:57,"Billing is confusing, I can't tell what plan I'm on.",in_app_survey,2,billing_payments
+2026-08-16 22:31:33,"Quick and friendly support, solved my sync issue right away.",app_store,3,customer_support
+2026-08-16 23:02:45,"Overcharged on my credit card, this is unacceptable.",in_app_survey,2,billing_payments
+2026-08-17 00:24:05,Can you add a dark mode option please?,support_ticket,3,feature_requests
+2026-08-17 00:46:35,Please add integration with Google Calendar.,in_app_survey,3,feature_requests
+2026-08-17 01:05:32,The app keeps crashing every time I try to open the dashboard.,google_play,2,crashes_stability
+2026-08-17 02:42:14,hey @TaskFlowApp Finally sync works flawlessly across all my devices now.,twitter,4,data_sync
+2026-08-17 03:29:47,"Performance has improved a lot, loads instantly now.",support_ticket,4,performance_speed
+2026-08-17 04:38:13,Two-factor authentication login is broken on iOS.,twitter,1,security_login
+2026-08-17 04:41:21,Loading spinner just spins forever on the reports page.,support_ticket,1,performance_speed
+2026-08-17 05:14:46,"Payment failed but you still charged me, please refund.",app_store,2,billing_payments
+2026-08-17 05:48:48,"Payment failed but you still charged me, please refund.",support_ticket,1,billing_payments
+2026-08-17 07:28:06,"Can't log in after resetting my password, keeps saying invalid credentials.",app_store,1,security_login
+2026-08-17 08:05:15,"App crashes on launch since the last update, completely unusable.",google_play,2,crashes_stability
+2026-08-17 10:12:18,Dark mode please! My eyes hurt using this at night.,google_play,3,ui_ux
+2026-08-17 10:31:58,Subject: Issue report. Support rep was rude and unhelpful when I asked for a refund.,support_ticket,3,customer_support
+2026-08-17 10:45:20,"Subject: Issue report. Waiting three days for a response from support, very disappointed.",support_ticket,3,customer_support
+2026-08-17 10:50:59,"Subject: Issue report. Great value for the price, worth every penny.",support_ticket,5,general_positive
+2026-08-17 17:19:43,Crashes whenever I try to attach a file to a task.,google_play,2,crashes_stability
+2026-08-17 17:52:35,Subject: Issue report. Dark mode please! My eyes hurt using this at night.,support_ticket,4,ui_ux
+2026-08-17 17:56:40,The app keeps crashing every time I try to open the dashboard.,google_play,1,crashes_stability
+2026-08-17 19:06:05,"Too many steps just to create my first project, simplify it.",in_app_survey,2,onboarding
+2026-08-17 19:25:53,"Navigation is unintuitive, took me forever to find my projects.",app_store,4,ui_ux
+2026-08-17 19:47:41,"The color scheme is hard to read, low contrast text everywhere.",app_store,2,ui_ux
+2026-08-17 19:59:20,"Subject: Issue report. Confusing setup process, I almost gave up before figuring it out.",support_ticket,2,onboarding
+2026-08-17 22:14:19,Two-factor authentication login is broken on iOS.,in_app_survey,2,security_login
+2026-08-17 23:13:46,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,1,crashes_stability
+2026-08-17 23:45:01,"Stability has gotten so much better, no crashes in weeks!",app_store,1,crashes_stability
+2026-08-18 00:28:11,"I wish the drag and drop was smoother, it feels clunky.",twitter,4,ui_ux
+2026-08-18 00:55:45,"Too many steps just to create my first project, simplify it.",app_store,2,onboarding
+2026-08-18 00:57:22,"Billing is confusing, I can't tell what plan I'm on.",app_store,1,billing_payments
+2026-08-18 04:08:49,"Overcharged on my credit card, this is unacceptable.",google_play,1,billing_payments
+2026-08-18 04:58:11,The tutorial doesn't explain how to invite team members.,support_ticket,3,onboarding
+2026-08-18 06:07:26,Crashes whenever I try to attach a file to a task.,support_ticket,1,crashes_stability
+2026-08-18 06:20:01,"Stability has gotten so much better, no crashes in weeks!",in_app_survey,1,crashes_stability
+2026-08-18 06:50:29,Please add support for Slack notifications.,google_play,3,feature_requests
+2026-08-18 06:51:10,Subject: Issue report. Would be nice to have recurring task templates.,support_ticket,3,feature_requests
+2026-08-18 07:54:06,Subject: Issue report. Two-factor authentication login is broken on iOS.,support_ticket,1,security_login
+2026-08-18 08:50:31,"It froze and then crashed while syncing, very frustrating.",app_store,1,crashes_stability
+2026-08-18 09:23:15,"This app has completely changed how my team manages projects, love it.",app_store,4,general_positive
+2026-08-18 09:45:34,Everything lags when I have more than 50 items in a list.,in_app_survey,1,performance_speed
+2026-08-18 12:56:00,@TaskFlowApp Support rep was rude and unhelpful when I asked for a refund.,twitter,3,customer_support
+2026-08-18 13:05:48,"Billing is confusing, I can't tell what plan I'm on.",support_ticket,1,billing_payments
+2026-08-18 13:57:36,"Onboarding was smooth, got set up in under five minutes.",app_store,3,onboarding
+2026-08-18 14:47:11,"@TaskFlowApp Stability has gotten so much better, no crashes in weeks!",twitter,1,crashes_stability
+2026-08-18 16:03:16,Sync is painfully slow between my phone and laptop.,google_play,2,performance_speed
+2026-08-18 16:36:24,"The new UI is confusing, I can't find the settings anymore.",in_app_survey,4,ui_ux
+2026-08-18 17:15:42,"Five stars, this has saved me so much time every week.",google_play,5,general_positive
+2026-08-18 17:45:32,@TaskFlowApp TaskFlow crashed twice today and I lost my unsaved notes.,twitter,2,crashes_stability
+2026-08-18 18:42:29,"Can't log in after resetting my password, keeps saying invalid credentials.",in_app_survey,1,security_login
+2026-08-18 18:43:10,"This app has completely changed how my team manages projects, love it.",app_store,5,general_positive
+2026-08-18 19:01:54,"Quick and friendly support, solved my sync issue right away.",in_app_survey,4,customer_support
+2026-08-18 19:50:46,"Subject: Issue report. Stability has gotten so much better, no crashes in weeks!",support_ticket,1,crashes_stability
+2026-08-18 19:52:15,"Can't log in after resetting my password, keeps saying invalid credentials.",in_app_survey,1,security_login
+2026-08-18 20:37:59,"Five stars, this has saved me so much time every week.",support_ticket,5,general_positive
+2026-08-18 21:58:36,"Simple, reliable, and does exactly what I need.",app_store,5,general_positive
+2026-08-18 22:00:28,"Simple, reliable, and does exactly what I need.",google_play,4,general_positive
+2026-08-18 22:10:55,"Can't log in after resetting my password, keeps saying invalid credentials.",app_store,2,security_login
+2026-08-18 22:23:02,My data didn't sync across devices and I lost a week of work.,in_app_survey,1,data_sync
+2026-08-19 00:04:19,"Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-19 00:06:31,Feature request: bulk editing for tasks would save so much time.,in_app_survey,3,feature_requests
+2026-08-19 01:36:45,"Stability has gotten so much better, no crashes in weeks!",app_store,1,crashes_stability
+2026-08-19 02:10:20,Finally sync works flawlessly across all my devices now.,in_app_survey,3,data_sync
+2026-08-19 05:21:54,@TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,2,crashes_stability
+2026-08-19 06:09:51,hey @TaskFlowApp Still waiting on a reply to my ticket from last week.,twitter,3,customer_support
+2026-08-19 06:12:45,@TaskFlowApp The tutorial doesn't explain how to invite team members.,twitter,3,onboarding
+2026-08-19 06:18:13,"The app is so slow, it takes forever to load my tasks.",app_store,2,performance_speed
+2026-08-19 07:41:51,It would be great if we could assign tasks to multiple people.,app_store,5,feature_requests
+2026-08-19 08:19:53,Really laggy scrolling through the calendar view.,twitter,1,performance_speed
+2026-08-19 08:43:54,@TaskFlowApp It would be great if we could assign tasks to multiple people.,twitter,5,feature_requests
+2026-08-19 08:53:31,"Sync between desktop and mobile is unreliable, tasks go missing.",app_store,2,data_sync
+2026-08-19 09:34:37,"Lost my data after the app crashed during a sync, need this fixed.",google_play,1,data_sync
+2026-08-19 10:11:21,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-19 10:37:10,Sync is painfully slow between my phone and laptop.,google_play,2,performance_speed
+2026-08-19 13:12:51,"The app is so slow, it takes forever to load my tasks.",app_store,2,performance_speed
+2026-08-19 13:59:23,"@TaskFlowApp Best productivity app I've used in years, highly recommend.",twitter,5,general_positive
+2026-08-19 14:02:57,@TaskFlowApp Would love to see a Kanban board view added.,twitter,5,feature_requests
+2026-08-19 14:40:04,Still waiting on a reply to my ticket from last week.,app_store,3,customer_support
+2026-08-19 14:40:04,TaskFlow crashed twice today and I lost my unsaved notes.,support_ticket,1,crashes_stability
+2026-08-19 14:55:19,Support team was super helpful and resolved my issue in minutes.,in_app_survey,2,customer_support
+2026-08-19 15:31:58,I wish there was a way to export my tasks to PDF.,in_app_survey,4,feature_requests
+2026-08-19 17:18:39,Support team was super helpful and resolved my issue in minutes.,in_app_survey,3,customer_support
+2026-08-19 17:31:14,Loved the guided walkthrough for new users.,in_app_survey,5,onboarding
+2026-08-19 18:33:16,The pricing page doesn't match what I was actually billed.,twitter,1,billing_payments
+2026-08-19 18:52:54,Cancelled my subscription but still got charged this month.,app_store,1,billing_payments
+2026-08-19 19:39:25,"Best productivity app I've used in years, highly recommend.",support_ticket,4,general_positive
+2026-08-19 20:03:26,Worried about security after seeing this app doesn't support 2FA properly.,google_play,1,security_login
+2026-08-19 20:07:36,Finally sync works flawlessly across all my devices now.,app_store,2,data_sync
+2026-08-19 20:18:38,"Great value for the price, worth every penny.",google_play,4,general_positive
+2026-08-19 21:57:59,"hey @TaskFlowApp Lost my data after the app crashed during a sync, need this fixed.",twitter,2,data_sync
+2026-08-19 22:09:28,"Constant crashing on my Android phone, please fix this ASAP.",google_play,2,crashes_stability
+2026-08-19 22:46:11,"hey @TaskFlowApp Billing is confusing, I can't tell what plan I'm on.",twitter,1,billing_payments
+2026-08-19 23:04:59,"Subject: Issue report. Got double charged after upgrading my plan, need a refund immediately.",support_ticket,2,billing_payments
+2026-08-19 23:07:59,hey @TaskFlowApp Any plans to add a native mobile widget?,twitter,2,feature_requests
+2026-08-19 23:14:58,"Waiting three days for a response from support, very disappointed.",support_ticket,3,customer_support
+2026-08-19 23:22:59,Loading spinner just spins forever on the reports page.,in_app_survey,2,performance_speed
+2026-08-19 23:34:07,Dark mode please! My eyes hurt using this at night.,support_ticket,3,ui_ux
+2026-08-19 23:39:11,"hey @TaskFlowApp Simple, reliable, and does exactly what I need.",twitter,5,general_positive
+2026-08-19 23:57:32,"hey @TaskFlowApp Payment failed but you still charged me, please refund.",twitter,1,billing_payments
+2026-08-20 00:17:28,I wish there was a way to export my tasks to PDF.,in_app_survey,4,feature_requests
+2026-08-20 01:09:20,TaskFlow crashed twice today and I lost my unsaved notes.,app_store,1,crashes_stability
+2026-08-20 01:16:17,"@TaskFlowApp Really clean and minimal design, easy to use.",twitter,4,ui_ux
+2026-08-20 01:37:56,"Stability has gotten so much better, no crashes in weeks!",google_play,1,crashes_stability
+2026-08-20 01:59:59,"@TaskFlowApp Login now works great with Face ID, very convenient.",twitter,5,security_login
+2026-08-20 04:47:10,Please add integration with Google Calendar.,app_store,3,feature_requests
+2026-08-20 06:05:47,"Getting locked out of my account randomly, this is concerning.",support_ticket,2,security_login
+2026-08-20 06:13:15,Support rep was rude and unhelpful when I asked for a refund.,app_store,2,customer_support
+2026-08-20 06:43:23,Can you add a dark mode option please?,in_app_survey,2,feature_requests
+2026-08-20 06:46:41,"Used to crash constantly, but the latest update fixed it for me.",app_store,1,crashes_stability
+2026-08-20 06:50:30,"Real-time sync is great, changes show up instantly on all my devices.",support_ticket,5,data_sync
+2026-08-20 07:23:09,"Simple, reliable, and does exactly what I need.",app_store,5,general_positive
+2026-08-20 09:31:53,hey @TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-20 09:51:28,"This app has completely changed how my team manages projects, love it.",app_store,4,general_positive
+2026-08-20 09:52:05,Sync is painfully slow between my phone and laptop.,google_play,2,performance_speed
+2026-08-20 10:12:39,"Great value for the price, worth every penny.",support_ticket,5,general_positive
+2026-08-20 10:30:38,"Confusing setup process, I almost gave up before figuring it out.",google_play,4,onboarding
+2026-08-20 10:40:45,"Billing is confusing, I can't tell what plan I'm on.",google_play,1,billing_payments
+2026-08-20 10:41:48,"Love the redesign, it looks so much cleaner now.",google_play,5,ui_ux
+2026-08-20 10:56:44,The tutorial doesn't explain how to invite team members.,support_ticket,3,onboarding
+2026-08-20 11:37:58,"Simple, reliable, and does exactly what I need.",twitter,5,general_positive
+2026-08-20 11:52:42,"Getting locked out of my account randomly, this is concerning.",in_app_survey,1,security_login
+2026-08-20 12:03:33,Finally sync works flawlessly across all my devices now.,in_app_survey,3,data_sync
+2026-08-20 12:25:04,"Font is too small on mobile, hard to read.",in_app_survey,3,ui_ux
+2026-08-20 12:55:49,"The color scheme is hard to read, low contrast text everywhere.",app_store,3,ui_ux
+2026-08-20 13:03:19,Cancelled my subscription but still got charged this month.,google_play,1,billing_payments
+2026-08-20 13:20:00,Would love to see a Kanban board view added.,app_store,5,feature_requests
+2026-08-20 13:24:01,The app keeps crashing every time I try to open the dashboard.,in_app_survey,2,crashes_stability
+2026-08-20 13:25:16,"hey @TaskFlowApp Great customer service, they walked me through the whole setup.",twitter,5,customer_support
+2026-08-20 14:04:05,The pricing page doesn't match what I was actually billed.,in_app_survey,2,billing_payments
+2026-08-20 14:09:48,@TaskFlowApp Can you add a dark mode option please?,twitter,3,feature_requests
+2026-08-20 16:00:31,@TaskFlowApp Dark mode please! My eyes hurt using this at night.,twitter,3,ui_ux
+2026-08-20 16:09:32,"Subject: Issue report. Stability has gotten so much better, no crashes in weeks!",support_ticket,2,crashes_stability
+2026-08-20 16:39:22,"Constant crashing on my Android phone, please fix this ASAP.",google_play,1,crashes_stability
+2026-08-20 18:56:42,Cancelled my subscription but still got charged this month.,in_app_survey,1,billing_payments
+2026-08-20 19:17:50,Subject: Issue report. TaskFlow crashed twice today and I lost my unsaved notes.,support_ticket,1,crashes_stability
+2026-08-20 20:39:30,"It froze and then crashed while syncing, very frustrating.",support_ticket,1,crashes_stability
+2026-08-20 20:54:59,Feature request: bulk editing for tasks would save so much time.,app_store,3,feature_requests
+2026-08-20 21:34:26,"Snappy and fast after the recent performance update, nice work.",google_play,1,performance_speed
+2026-08-20 23:03:04,Dark mode please! My eyes hurt using this at night.,google_play,3,ui_ux
+2026-08-20 23:03:43,"Stability has gotten so much better, no crashes in weeks!",app_store,2,crashes_stability
+2026-08-20 23:13:19,Can you add a dark mode option please?,app_store,3,feature_requests
+2026-08-20 23:30:46,"Performance has improved a lot, loads instantly now.",in_app_survey,4,performance_speed
+2026-08-20 23:30:55,"Waiting three days for a response from support, very disappointed.",support_ticket,4,customer_support
+2026-08-20 23:51:40,"Getting locked out of my account randomly, this is concerning.",google_play,2,security_login
+2026-08-21 00:36:24,"This app has completely changed how my team manages projects, love it.",in_app_survey,4,general_positive
+2026-08-21 00:52:24,Please add integration with Google Calendar.,twitter,4,feature_requests
+2026-08-21 01:33:50,"Great value for the price, worth every penny.",google_play,5,general_positive
+2026-08-21 01:40:32,"Constant crashing on my Android phone, please fix this ASAP.",google_play,1,crashes_stability
+2026-08-21 02:02:37,Any plans to add a native mobile widget?,twitter,4,feature_requests
+2026-08-21 03:03:42,"Onboarding was smooth, got set up in under five minutes.",app_store,4,onboarding
+2026-08-21 03:06:33,"Confusing setup process, I almost gave up before figuring it out.",in_app_survey,2,onboarding
+2026-08-21 03:07:50,Please add support for Slack notifications.,app_store,2,feature_requests
+2026-08-21 03:31:09,"Overcharged on my credit card, this is unacceptable.",google_play,2,billing_payments
+2026-08-21 03:38:31,"Hope you add offline mode soon, I travel a lot without wifi.",in_app_survey,4,feature_requests
+2026-08-21 03:40:04,Subject: Issue report. Can you add a dark mode option please?,support_ticket,4,feature_requests
+2026-08-21 04:02:13,"Getting locked out of my account randomly, this is concerning.",support_ticket,1,security_login
+2026-08-21 04:22:33,"Billing is confusing, I can't tell what plan I'm on.",google_play,2,billing_payments
+2026-08-21 04:22:39,"Love the redesign, it looks so much cleaner now.",twitter,5,ui_ux
+2026-08-21 04:43:57,"It froze and then crashed while syncing, very frustrating.",app_store,1,crashes_stability
+2026-08-21 05:12:48,"Great value for the price, worth every penny.",in_app_survey,4,general_positive
+2026-08-21 05:19:20,Please add support for Slack notifications.,app_store,4,feature_requests
+2026-08-21 06:16:27,"App crashes on launch since the last update, completely unusable.",in_app_survey,1,crashes_stability
+2026-08-21 07:32:41,"@TaskFlowApp App crashes on launch since the last update, completely unusable.",twitter,1,crashes_stability
+2026-08-21 07:56:09,The app keeps crashing every time I try to open the dashboard.,support_ticket,1,crashes_stability
+2026-08-21 07:58:27,"The support chat is unresponsive, nobody ever answers.",in_app_survey,3,customer_support
+2026-08-21 08:01:31,"Getting locked out of my account randomly, this is concerning.",google_play,1,security_login
+2026-08-21 08:01:39,"Getting locked out of my account randomly, this is concerning.",app_store,2,security_login
+2026-08-21 08:17:06,"Sync between desktop and mobile is unreliable, tasks go missing.",app_store,2,data_sync
+2026-08-21 08:21:45,"Great value for the price, worth every penny.",support_ticket,5,general_positive
+2026-08-21 08:25:24,"Great customer service, they walked me through the whole setup.",in_app_survey,5,customer_support
+2026-08-21 08:29:55,TaskFlow crashed twice today and I lost my unsaved notes.,in_app_survey,2,crashes_stability
+2026-08-21 08:30:39,It would be great if we could assign tasks to multiple people.,google_play,4,feature_requests
+2026-08-21 08:44:04,"Best productivity app I've used in years, highly recommend.",app_store,5,general_positive
+2026-08-21 09:06:41,"@TaskFlowApp Got double charged after upgrading my plan, need a refund immediately.",twitter,1,billing_payments
+2026-08-21 09:35:19,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,2,crashes_stability
+2026-08-21 10:11:40,Finally sync works flawlessly across all my devices now.,google_play,3,data_sync
+2026-08-21 11:22:40,My data didn't sync across devices and I lost a week of work.,app_store,1,data_sync
+2026-08-21 11:48:04,"hey @TaskFlowApp Billing is confusing, I can't tell what plan I'm on.",twitter,2,billing_payments
+2026-08-21 12:07:24,"Subject: Issue report. Navigation is unintuitive, took me forever to find my projects.",support_ticket,3,ui_ux
+2026-08-21 12:52:24,hey @TaskFlowApp The search feature is slow and often times out.,twitter,1,performance_speed
+2026-08-21 13:05:02,Subject: Issue report. Would love to see a Kanban board view added.,support_ticket,5,feature_requests
+2026-08-21 13:37:57,The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-21 13:53:39,"Subject: Issue report. Too many steps just to create my first project, simplify it.",support_ticket,3,onboarding
+2026-08-21 14:04:31,Please add integration with Google Calendar.,twitter,2,feature_requests
+2026-08-21 14:31:57,"Waiting three days for a response from support, very disappointed.",app_store,3,customer_support
+2026-08-21 15:10:22,"The app is so slow, it takes forever to load my tasks.",in_app_survey,1,performance_speed
+2026-08-21 15:28:17,"@TaskFlowApp Sync between desktop and mobile is unreliable, tasks go missing.",twitter,1,data_sync
+2026-08-21 15:32:32,Subject: Issue report. Two-factor authentication login is broken on iOS.,support_ticket,1,security_login
+2026-08-21 15:34:39,"@TaskFlowApp Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-21 16:16:31,"Constant crashing on my Android phone, please fix this ASAP.",support_ticket,1,crashes_stability
+2026-08-21 16:24:27,"hey @TaskFlowApp App crashes on launch since the last update, completely unusable.",twitter,1,crashes_stability
+2026-08-21 16:36:16,"Performance has improved a lot, loads instantly now.",google_play,4,performance_speed
+2026-08-21 17:08:43,Subject: Issue report. The app keeps crashing every time I try to open the dashboard.,support_ticket,1,crashes_stability
+2026-08-21 17:51:01,@TaskFlowApp I wish there was a way to export my tasks to PDF.,twitter,4,feature_requests
+2026-08-21 17:56:54,"Subject: Issue report. Lost my data after the app crashed during a sync, need this fixed.",support_ticket,1,data_sync
+2026-08-21 18:59:34,Dark mode please! My eyes hurt using this at night.,google_play,4,ui_ux
+2026-08-21 19:11:25,Subject: Issue report. The search feature is slow and often times out.,support_ticket,1,performance_speed
+2026-08-21 19:33:26,"Simple, reliable, and does exactly what I need.",app_store,5,general_positive
+2026-08-21 20:30:40,The search feature is slow and often times out.,google_play,1,performance_speed
+2026-08-21 21:01:23,Crashes whenever I try to attach a file to a task.,google_play,1,crashes_stability
+2026-08-21 22:14:17,"Love the redesign, it looks so much cleaner now.",app_store,4,ui_ux
+2026-08-21 22:14:31,Subject: Issue report. The app keeps crashing every time I try to open the dashboard.,support_ticket,1,crashes_stability
+2026-08-21 22:18:09,"Onboarding was smooth, got set up in under five minutes.",in_app_survey,3,onboarding
+2026-08-21 22:35:05,"The support chat is unresponsive, nobody ever answers.",twitter,3,customer_support
+2026-08-21 23:25:56,"Great value for the price, worth every penny.",google_play,5,general_positive
+2026-08-21 23:30:43,Loved the guided walkthrough for new users.,google_play,4,onboarding
+2026-08-21 23:58:14,"hey @TaskFlowApp Sync between desktop and mobile is unreliable, tasks go missing.",twitter,1,data_sync
+2026-08-22 00:22:34,"Simple, reliable, and does exactly what I need.",google_play,5,general_positive
+2026-08-22 00:23:51,"Waiting three days for a response from support, very disappointed.",app_store,3,customer_support
+2026-08-22 00:39:11,"Simple, reliable, and does exactly what I need.",in_app_survey,5,general_positive
+2026-08-22 00:41:10,"hey @TaskFlowApp Getting locked out of my account randomly, this is concerning.",twitter,1,security_login
+2026-08-22 01:29:42,Support team was super helpful and resolved my issue in minutes.,in_app_survey,3,customer_support
+2026-08-22 01:43:32,Worried about security after seeing this app doesn't support 2FA properly.,google_play,1,security_login
+2026-08-22 02:15:41,"The app is so slow, it takes forever to load my tasks.",google_play,1,performance_speed
+2026-08-22 02:24:52,Crashes whenever I try to attach a file to a task.,in_app_survey,1,crashes_stability
+2026-08-22 03:15:06,"Simple, reliable, and does exactly what I need.",google_play,4,general_positive
+2026-08-22 03:15:16,Two-factor authentication login is broken on iOS.,support_ticket,1,security_login
+2026-08-22 03:36:10,"The support chat is unresponsive, nobody ever answers.",google_play,2,customer_support
+2026-08-22 04:15:40,"Constant crashing on my Android phone, please fix this ASAP.",google_play,1,crashes_stability
+2026-08-22 04:20:15,"Five stars, this has saved me so much time every week.",in_app_survey,5,general_positive
+2026-08-22 04:42:09,"hey @TaskFlowApp Stability has gotten so much better, no crashes in weeks!",twitter,1,crashes_stability
+2026-08-22 04:57:21,"Stability has gotten so much better, no crashes in weeks!",app_store,2,crashes_stability
+2026-08-22 05:19:52,"Snappy and fast after the recent performance update, nice work.",in_app_survey,1,performance_speed
+2026-08-22 05:43:23,"Quick and friendly support, solved my sync issue right away.",in_app_survey,3,customer_support
+2026-08-22 06:03:23,"Performance has improved a lot, loads instantly now.",google_play,3,performance_speed
+2026-08-22 06:11:46,"hey @TaskFlowApp Best productivity app I've used in years, highly recommend.",twitter,5,general_positive
+2026-08-22 06:18:35,"Subject: Issue report. Used to crash constantly, but the latest update fixed it for me.",support_ticket,1,crashes_stability
+2026-08-22 06:28:40,"Subject: Issue report. Overcharged on my credit card, this is unacceptable.",support_ticket,2,billing_payments
+2026-08-22 06:32:59,"App crashes on launch since the last update, completely unusable.",support_ticket,1,crashes_stability
+2026-08-22 06:57:37,"Overcharged on my credit card, this is unacceptable.",in_app_survey,1,billing_payments
+2026-08-22 07:06:33,"This app has completely changed how my team manages projects, love it.",app_store,5,general_positive
+2026-08-22 07:44:31,Loved the guided walkthrough for new users.,app_store,4,onboarding
+2026-08-22 07:50:04,hey @TaskFlowApp Feature request: bulk editing for tasks would save so much time.,twitter,2,feature_requests
+2026-08-22 08:10:35,"Five stars, this has saved me so much time every week.",google_play,5,general_positive
+2026-08-22 08:38:23,"Navigation is unintuitive, took me forever to find my projects.",in_app_survey,3,ui_ux
+2026-08-22 09:05:29,"Constant crashing on my Android phone, please fix this ASAP.",in_app_survey,2,crashes_stability
+2026-08-22 09:06:51,Can you add a dark mode option please?,app_store,4,feature_requests
+2026-08-22 09:11:46,"@TaskFlowApp The new UI is confusing, I can't find the settings anymore.",twitter,4,ui_ux
+2026-08-22 09:28:24,"Great customer service, they walked me through the whole setup.",support_ticket,4,customer_support
+2026-08-22 09:35:18,"Lost my data after the app crashed during a sync, need this fixed.",google_play,1,data_sync
+2026-08-22 09:42:09,"This app has completely changed how my team manages projects, love it.",google_play,4,general_positive
+2026-08-22 10:10:37,Support rep was rude and unhelpful when I asked for a refund.,google_play,4,customer_support
+2026-08-22 10:35:21,Support rep was rude and unhelpful when I asked for a refund.,in_app_survey,3,customer_support
+2026-08-22 11:07:39,Feature request: bulk editing for tasks would save so much time.,support_ticket,2,feature_requests
+2026-08-22 11:12:05,The pricing page doesn't match what I was actually billed.,twitter,1,billing_payments
+2026-08-22 11:23:28,The tutorial doesn't explain how to invite team members.,support_ticket,4,onboarding
+2026-08-22 11:34:36,"Confusing setup process, I almost gave up before figuring it out.",in_app_survey,2,onboarding
+2026-08-22 11:36:26,"Snappy and fast after the recent performance update, nice work.",app_store,2,performance_speed
+2026-08-22 12:13:36,"Font is too small on mobile, hard to read.",support_ticket,2,ui_ux
+2026-08-22 12:32:12,"Got double charged after upgrading my plan, need a refund immediately.",app_store,2,billing_payments
+2026-08-22 13:16:12,"Great value for the price, worth every penny.",google_play,5,general_positive
+2026-08-22 13:18:44,"Five stars, this has saved me so much time every week.",in_app_survey,4,general_positive
+2026-08-22 13:40:04,"This app has completely changed how my team manages projects, love it.",google_play,5,general_positive
+2026-08-22 13:41:06,The tutorial doesn't explain how to invite team members.,google_play,4,onboarding
+2026-08-22 15:00:10,The app keeps crashing every time I try to open the dashboard.,google_play,1,crashes_stability
+2026-08-22 15:13:44,"App crashes on launch since the last update, completely unusable.",support_ticket,2,crashes_stability
+2026-08-22 15:38:20,Subject: Issue report. Would be nice to have recurring task templates.,support_ticket,2,feature_requests
+2026-08-22 16:17:26,"Onboarding was smooth, got set up in under five minutes.",app_store,2,onboarding
+2026-08-22 16:34:53,"It froze and then crashed while syncing, very frustrating.",app_store,1,crashes_stability
+2026-08-22 17:43:16,"Real-time sync is great, changes show up instantly on all my devices.",google_play,4,data_sync
+2026-08-22 17:44:59,"Stability has gotten so much better, no crashes in weeks!",in_app_survey,1,crashes_stability
+2026-08-22 17:45:37,"Support fixed my billing issue quickly, thank you.",support_ticket,1,billing_payments
+2026-08-22 17:53:46,I wish there was a way to export my tasks to PDF.,app_store,3,feature_requests
+2026-08-22 18:02:28,Still waiting on a reply to my ticket from last week.,google_play,3,customer_support
+2026-08-22 18:26:48,Loading spinner just spins forever on the reports page.,google_play,1,performance_speed
+2026-08-22 18:42:14,"Best productivity app I've used in years, highly recommend.",support_ticket,4,general_positive
+2026-08-22 19:16:31,Finally sync works flawlessly across all my devices now.,in_app_survey,2,data_sync
+2026-08-22 19:32:26,"Confusing setup process, I almost gave up before figuring it out.",google_play,2,onboarding
+2026-08-22 19:36:06,Any plans to add a native mobile widget?,app_store,2,feature_requests
+2026-08-22 20:15:08,"Great value for the price, worth every penny.",in_app_survey,5,general_positive
+2026-08-22 20:17:57,Cancelled my subscription but still got charged this month.,app_store,2,billing_payments
+2026-08-22 20:21:27,@TaskFlowApp Finally sync works flawlessly across all my devices now.,twitter,2,data_sync
+2026-08-22 20:23:32,hey @TaskFlowApp TaskFlow crashed twice today and I lost my unsaved notes.,twitter,2,crashes_stability
+2026-08-22 20:35:16,"Getting locked out of my account randomly, this is concerning.",in_app_survey,1,security_login
+2026-08-22 20:47:17,"Quick and friendly support, solved my sync issue right away.",google_play,2,customer_support
+2026-08-22 21:14:28,"Payment failed but you still charged me, please refund.",twitter,2,billing_payments
+2026-08-22 21:25:12,"Onboarding was smooth, got set up in under five minutes.",app_store,4,onboarding
+2026-08-22 21:27:47,"Lost my data after the app crashed during a sync, need this fixed.",app_store,1,data_sync
+2026-08-22 21:44:14,@TaskFlowApp Everything lags when I have more than 50 items in a list.,twitter,2,performance_speed
+2026-08-22 21:57:00,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-22 22:04:11,"Stability has gotten so much better, no crashes in weeks!",google_play,1,crashes_stability
+2026-08-22 22:05:28,Really laggy scrolling through the calendar view.,twitter,1,performance_speed
+2026-08-22 23:01:25,hey @TaskFlowApp Would be nice to have recurring task templates.,twitter,3,feature_requests
+2026-08-22 23:01:44,"Best productivity app I've used in years, highly recommend.",twitter,4,general_positive
+2026-08-22 23:43:20,"Performance has improved a lot, loads instantly now.",support_ticket,4,performance_speed
+2026-08-22 23:56:35,"Love the redesign, it looks so much cleaner now.",google_play,4,ui_ux
+2026-08-23 00:12:08,"Sync between desktop and mobile is unreliable, tasks go missing.",in_app_survey,1,data_sync
+2026-08-23 00:16:35,It would be great if we could assign tasks to multiple people.,app_store,5,feature_requests
+2026-08-23 00:27:39,"This app has completely changed how my team manages projects, love it.",google_play,5,general_positive
+2026-08-23 00:56:39,"Great value for the price, worth every penny.",google_play,4,general_positive
+2026-08-23 01:02:01,"Best productivity app I've used in years, highly recommend.",support_ticket,5,general_positive
+2026-08-23 01:08:10,"Can't log in after resetting my password, keeps saying invalid credentials.",in_app_survey,2,security_login
+2026-08-23 01:15:43,"Sync between desktop and mobile is unreliable, tasks go missing.",google_play,2,data_sync
+2026-08-23 02:21:59,Would be nice to have recurring task templates.,twitter,2,feature_requests
+2026-08-23 02:22:19,"Subject: Issue report. Hope you add offline mode soon, I travel a lot without wifi.",support_ticket,4,feature_requests
+2026-08-23 02:36:41,"Best productivity app I've used in years, highly recommend.",in_app_survey,5,general_positive
+2026-08-23 02:52:02,Any plans to add a native mobile widget?,google_play,4,feature_requests
+2026-08-23 03:16:49,Cancelled my subscription but still got charged this month.,app_store,2,billing_payments
+2026-08-23 03:22:09,"Simple, reliable, and does exactly what I need.",support_ticket,5,general_positive
+2026-08-23 03:37:23,Worried about security after seeing this app doesn't support 2FA properly.,support_ticket,2,security_login
+2026-08-23 03:52:01,"Really clean and minimal design, easy to use.",in_app_survey,4,ui_ux
+2026-08-23 03:56:52,hey @TaskFlowApp Would love to see a Kanban board view added.,twitter,4,feature_requests
+2026-08-23 04:07:52,"The app is so slow, it takes forever to load my tasks.",twitter,1,performance_speed
+2026-08-23 04:41:11,"Great value for the price, worth every penny.",twitter,5,general_positive
+2026-08-23 04:45:41,"Really clean and minimal design, easy to use.",google_play,3,ui_ux
+2026-08-23 06:00:05,"The color scheme is hard to read, low contrast text everywhere.",support_ticket,4,ui_ux
+2026-08-23 06:05:48,Support rep was rude and unhelpful when I asked for a refund.,app_store,3,customer_support
+2026-08-23 06:10:36,Still waiting on a reply to my ticket from last week.,support_ticket,3,customer_support
+2026-08-23 06:47:46,Subject: Issue report. Really laggy scrolling through the calendar view.,support_ticket,2,performance_speed
+2026-08-23 07:02:33,The pricing page doesn't match what I was actually billed.,in_app_survey,2,billing_payments
+2026-08-23 07:19:01,Two-factor authentication login is broken on iOS.,google_play,1,security_login
+2026-08-23 07:31:09,"Lost my data after the app crashed during a sync, need this fixed.",in_app_survey,2,data_sync
+2026-08-23 07:34:46,"Navigation is unintuitive, took me forever to find my projects.",in_app_survey,3,ui_ux
+2026-08-23 07:43:51,Still waiting on a reply to my ticket from last week.,google_play,3,customer_support
+2026-08-23 07:55:20,"The app is so slow, it takes forever to load my tasks.",google_play,2,performance_speed
+2026-08-23 07:59:58,"The support chat is unresponsive, nobody ever answers.",app_store,4,customer_support
+2026-08-23 08:19:23,"Hope you add offline mode soon, I travel a lot without wifi.",support_ticket,2,feature_requests
+2026-08-23 08:40:01,Subject: Issue report. The app keeps crashing every time I try to open the dashboard.,support_ticket,1,crashes_stability
+2026-08-23 08:48:12,It would be great if we could assign tasks to multiple people.,app_store,4,feature_requests
+2026-08-23 08:50:24,"Overcharged on my credit card, this is unacceptable.",app_store,2,billing_payments
+2026-08-23 08:51:17,"Constant crashing on my Android phone, please fix this ASAP.",google_play,2,crashes_stability
+2026-08-23 09:02:01,"Sync between desktop and mobile is unreliable, tasks go missing.",app_store,2,data_sync
+2026-08-23 09:11:41,"Best productivity app I've used in years, highly recommend.",google_play,5,general_positive
+2026-08-23 09:35:18,"Subject: Issue report. Lost my data after the app crashed during a sync, need this fixed.",support_ticket,1,data_sync
+2026-08-23 09:41:28,Really laggy scrolling through the calendar view.,twitter,2,performance_speed
+2026-08-23 09:44:03,"Onboarding was smooth, got set up in under five minutes.",support_ticket,4,onboarding
+2026-08-23 10:27:08,TaskFlow crashed twice today and I lost my unsaved notes.,in_app_survey,1,crashes_stability
+2026-08-23 10:31:54,"The app is so slow, it takes forever to load my tasks.",in_app_survey,1,performance_speed
+2026-08-23 10:38:32,"Love the redesign, it looks so much cleaner now.",in_app_survey,5,ui_ux
+2026-08-23 10:46:30,I wish there was a way to export my tasks to PDF.,app_store,2,feature_requests
+2026-08-23 10:56:47,"Stability has gotten so much better, no crashes in weeks!",in_app_survey,1,crashes_stability
+2026-08-23 11:22:00,"Overcharged on my credit card, this is unacceptable.",in_app_survey,2,billing_payments
+2026-08-23 12:06:52,"Too many steps just to create my first project, simplify it.",in_app_survey,2,onboarding
+2026-08-23 12:57:37,Subject: Issue report. I wish there was a way to export my tasks to PDF.,support_ticket,4,feature_requests
+2026-08-23 13:36:33,"Used to crash constantly, but the latest update fixed it for me.",support_ticket,2,crashes_stability
+2026-08-23 13:46:05,"This app has completely changed how my team manages projects, love it.",app_store,5,general_positive
+2026-08-23 14:24:39,"Subject: Issue report. Hope you add offline mode soon, I travel a lot without wifi.",support_ticket,2,feature_requests
+2026-08-23 15:41:41,My data didn't sync across devices and I lost a week of work.,google_play,1,data_sync
+2026-08-23 15:47:08,"@TaskFlowApp Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-23 16:08:12,"Used to crash constantly, but the latest update fixed it for me.",support_ticket,1,crashes_stability
+2026-08-23 16:11:08,Crashes whenever I try to attach a file to a task.,support_ticket,1,crashes_stability
+2026-08-23 16:19:46,"Navigation is unintuitive, took me forever to find my projects.",twitter,4,ui_ux
+2026-08-23 16:42:04,"Subject: Issue report. Best productivity app I've used in years, highly recommend.",support_ticket,5,general_positive
+2026-08-23 16:42:37,Subject: Issue report. The pricing page doesn't match what I was actually billed.,support_ticket,1,billing_payments
+2026-08-23 16:45:42,"The color scheme is hard to read, low contrast text everywhere.",in_app_survey,2,ui_ux
+2026-08-23 16:51:04,"Can't log in after resetting my password, keeps saying invalid credentials.",app_store,1,security_login
+2026-08-23 17:01:52,"Stability has gotten so much better, no crashes in weeks!",twitter,1,crashes_stability
+2026-08-23 17:10:11,"The app is so slow, it takes forever to load my tasks.",app_store,1,performance_speed
+2026-08-23 17:26:02,Still waiting on a reply to my ticket from last week.,app_store,2,customer_support
+2026-08-23 17:28:42,My data didn't sync across devices and I lost a week of work.,app_store,1,data_sync
+2026-08-23 17:56:01,"Sync between desktop and mobile is unreliable, tasks go missing.",google_play,2,data_sync
+2026-08-23 18:03:56,"Subject: Issue report. Payment failed but you still charged me, please refund.",support_ticket,1,billing_payments
+2026-08-23 18:08:03,Subject: Issue report. Feature request: bulk editing for tasks would save so much time.,support_ticket,3,feature_requests
+2026-08-23 18:13:06,"hey @TaskFlowApp Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-23 18:13:25,"Simple, reliable, and does exactly what I need.",app_store,4,general_positive
+2026-08-23 18:28:42,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-23 18:55:26,Still waiting on a reply to my ticket from last week.,support_ticket,2,customer_support
+2026-08-23 19:14:44,"The color scheme is hard to read, low contrast text everywhere.",support_ticket,3,ui_ux
+2026-08-23 19:23:10,"Great value for the price, worth every penny.",in_app_survey,5,general_positive
+2026-08-23 20:00:09,Support team was super helpful and resolved my issue in minutes.,app_store,3,customer_support
+2026-08-23 20:14:49,Still waiting on a reply to my ticket from last week.,twitter,3,customer_support
+2026-08-23 20:17:49,Subject: Issue report. Crashes whenever I try to attach a file to a task.,support_ticket,1,crashes_stability
+2026-08-23 21:20:51,Subject: Issue report. Loved the guided walkthrough for new users.,support_ticket,4,onboarding
+2026-08-23 21:52:15,"Real-time sync is great, changes show up instantly on all my devices.",support_ticket,4,data_sync
+2026-08-23 22:39:20,"Quick and friendly support, solved my sync issue right away.",in_app_survey,4,customer_support
+2026-08-23 22:42:37,@TaskFlowApp My data didn't sync across devices and I lost a week of work.,twitter,2,data_sync
+2026-08-23 22:44:25,"Support fixed my billing issue quickly, thank you.",in_app_survey,2,billing_payments
+2026-08-23 22:45:01,"Onboarding was smooth, got set up in under five minutes.",support_ticket,3,onboarding
+2026-08-23 22:56:27,"Got double charged after upgrading my plan, need a refund immediately.",app_store,2,billing_payments
+2026-08-23 23:05:06,"Great value for the price, worth every penny.",app_store,4,general_positive
+2026-08-23 23:25:18,hey @TaskFlowApp Still waiting on a reply to my ticket from last week.,twitter,4,customer_support
+2026-08-23 23:27:48,"Quick and friendly support, solved my sync issue right away.",app_store,4,customer_support
+2026-08-23 23:34:31,Subject: Issue report. My data didn't sync across devices and I lost a week of work.,support_ticket,2,data_sync
+2026-08-23 23:37:09,Two-factor authentication login is broken on iOS.,in_app_survey,2,security_login
+2026-08-24 00:00:01,"Constant crashing on my Android phone, please fix this ASAP.",google_play,2,crashes_stability
+2026-08-24 00:07:04,"Too many steps just to create my first project, simplify it.",in_app_survey,4,onboarding
+2026-08-24 00:09:44,"Login now works great with Face ID, very convenient.",google_play,5,security_login
+2026-08-24 00:27:29,"The color scheme is hard to read, low contrast text everywhere.",support_ticket,3,ui_ux
+2026-08-24 00:56:11,Still waiting on a reply to my ticket from last week.,google_play,2,customer_support
+2026-08-24 01:07:25,"Subject: Issue report. App crashes on launch since the last update, completely unusable.",support_ticket,2,crashes_stability
+2026-08-24 01:15:20,"Subject: Issue report. Got double charged after upgrading my plan, need a refund immediately.",support_ticket,1,billing_payments
+2026-08-24 01:20:44,"hey @TaskFlowApp Used to crash constantly, but the latest update fixed it for me.",twitter,1,crashes_stability
+2026-08-24 01:21:22,Would love to see a Kanban board view added.,in_app_survey,5,feature_requests
+2026-08-24 01:24:12,"Subject: Issue report. Payment failed but you still charged me, please refund.",support_ticket,1,billing_payments
+2026-08-24 01:58:00,"The new UI is confusing, I can't find the settings anymore.",app_store,2,ui_ux
+2026-08-24 02:01:23,Feature request: bulk editing for tasks would save so much time.,in_app_survey,2,feature_requests
+2026-08-24 02:03:58,"hey @TaskFlowApp I wish the drag and drop was smoother, it feels clunky.",twitter,3,ui_ux
+2026-08-24 02:44:18,"Constant crashing on my Android phone, please fix this ASAP.",in_app_survey,1,crashes_stability
+2026-08-24 02:48:01,"The color scheme is hard to read, low contrast text everywhere.",app_store,3,ui_ux
+2026-08-24 02:50:46,Support team was super helpful and resolved my issue in minutes.,support_ticket,2,customer_support
+2026-08-24 03:13:44,The app keeps crashing every time I try to open the dashboard.,google_play,1,crashes_stability
+2026-08-24 03:34:14,My data didn't sync across devices and I lost a week of work.,app_store,1,data_sync
+2026-08-24 03:35:06,Support rep was rude and unhelpful when I asked for a refund.,app_store,2,customer_support
+2026-08-24 03:51:43,Can you add a dark mode option please?,in_app_survey,3,feature_requests
+2026-08-24 04:03:08,"App crashes on launch since the last update, completely unusable.",google_play,2,crashes_stability
+2026-08-24 04:07:15,It would be great if we could assign tasks to multiple people.,google_play,5,feature_requests
+2026-08-24 04:14:41,"Used to crash constantly, but the latest update fixed it for me.",support_ticket,1,crashes_stability
+2026-08-24 04:30:56,"Lost my data after the app crashed during a sync, need this fixed.",support_ticket,1,data_sync
+2026-08-24 04:31:08,"Real-time sync is great, changes show up instantly on all my devices.",app_store,5,data_sync
+2026-08-24 04:36:10,Crashes whenever I try to attach a file to a task.,in_app_survey,2,crashes_stability
+2026-08-24 05:23:40,"Constant crashing on my Android phone, please fix this ASAP.",google_play,2,crashes_stability
+2026-08-24 05:53:18,Two-factor authentication login is broken on iOS.,app_store,2,security_login
+2026-08-24 06:21:36,My data didn't sync across devices and I lost a week of work.,twitter,1,data_sync
+2026-08-24 06:25:32,"Billing is confusing, I can't tell what plan I'm on.",google_play,2,billing_payments
+2026-08-24 06:25:41,"Confusing setup process, I almost gave up before figuring it out.",app_store,3,onboarding
+2026-08-24 06:31:03,TaskFlow crashed twice today and I lost my unsaved notes.,google_play,2,crashes_stability
+2026-08-24 06:36:20,Would be nice to have recurring task templates.,in_app_survey,3,feature_requests
+2026-08-24 07:00:15,Crashes whenever I try to attach a file to a task.,google_play,1,crashes_stability
+2026-08-24 07:10:24,"Subject: Issue report. Five stars, this has saved me so much time every week.",support_ticket,4,general_positive
+2026-08-24 07:24:51,Subject: Issue report. TaskFlow crashed twice today and I lost my unsaved notes.,support_ticket,2,crashes_stability
+2026-08-24 07:26:09,"This app has completely changed how my team manages projects, love it.",in_app_survey,4,general_positive
+2026-08-24 07:51:25,"@TaskFlowApp Waiting three days for a response from support, very disappointed.",twitter,3,customer_support
+2026-08-24 08:08:48,"hey @TaskFlowApp It froze and then crashed while syncing, very frustrating.",twitter,1,crashes_stability
+2026-08-24 08:34:31,hey @TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-24 08:35:59,The search feature is slow and often times out.,google_play,2,performance_speed
+2026-08-24 08:37:57,"Confusing setup process, I almost gave up before figuring it out.",app_store,4,onboarding
+2026-08-24 08:45:37,Two-factor authentication login is broken on iOS.,support_ticket,1,security_login
+2026-08-24 08:49:35,Crashes whenever I try to attach a file to a task.,google_play,1,crashes_stability
+2026-08-24 08:55:35,Crashes whenever I try to attach a file to a task.,app_store,2,crashes_stability
+2026-08-24 09:28:13,TaskFlow crashed twice today and I lost my unsaved notes.,twitter,1,crashes_stability
+2026-08-24 09:33:58,"Great value for the price, worth every penny.",twitter,5,general_positive
+2026-08-24 09:37:29,"I wish the drag and drop was smoother, it feels clunky.",in_app_survey,4,ui_ux
+2026-08-24 09:42:25,"Five stars, this has saved me so much time every week.",in_app_survey,5,general_positive
+2026-08-24 09:58:08,"Stability has gotten so much better, no crashes in weeks!",app_store,1,crashes_stability
+2026-08-24 10:01:13,The app keeps crashing every time I try to open the dashboard.,support_ticket,1,crashes_stability
+2026-08-24 10:01:47,It would be great if we could assign tasks to multiple people.,app_store,5,feature_requests
+2026-08-24 10:29:33,"Subject: Issue report. Really clean and minimal design, easy to use.",support_ticket,2,ui_ux
+2026-08-24 10:30:56,Two-factor authentication login is broken on iOS.,app_store,1,security_login
+2026-08-24 10:32:06,"The new UI is confusing, I can't find the settings anymore.",in_app_survey,2,ui_ux
+2026-08-24 10:34:07,TaskFlow crashed twice today and I lost my unsaved notes.,in_app_survey,1,crashes_stability
+2026-08-24 10:46:48,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-24 10:52:55,"Used to crash constantly, but the latest update fixed it for me.",google_play,2,crashes_stability
+2026-08-24 10:57:25,"Overcharged on my credit card, this is unacceptable.",google_play,1,billing_payments
+2026-08-24 11:00:38,"Subject: Issue report. The new UI is confusing, I can't find the settings anymore.",support_ticket,3,ui_ux
+2026-08-24 11:42:46,The app keeps crashing every time I try to open the dashboard.,in_app_survey,2,crashes_stability
+2026-08-24 11:51:16,"App crashes on launch since the last update, completely unusable.",in_app_survey,2,crashes_stability
+2026-08-24 12:06:11,"It froze and then crashed while syncing, very frustrating.",twitter,2,crashes_stability
+2026-08-24 12:08:32,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,2,crashes_stability
+2026-08-24 12:23:30,"Waiting three days for a response from support, very disappointed.",support_ticket,2,customer_support
+2026-08-24 12:35:25,"Subject: Issue report. It froze and then crashed while syncing, very frustrating.",support_ticket,1,crashes_stability
+2026-08-24 12:38:08,"This app has completely changed how my team manages projects, love it.",in_app_survey,5,general_positive
+2026-08-24 12:39:22,"Subject: Issue report. Getting locked out of my account randomly, this is concerning.",support_ticket,1,security_login
+2026-08-24 13:01:13,The app keeps crashing every time I try to open the dashboard.,google_play,1,crashes_stability
+2026-08-24 13:05:56,"App crashes on launch since the last update, completely unusable.",in_app_survey,1,crashes_stability
+2026-08-24 13:12:39,"Great customer service, they walked me through the whole setup.",in_app_survey,4,customer_support
+2026-08-24 13:26:28,"Subject: Issue report. It froze and then crashed while syncing, very frustrating.",support_ticket,2,crashes_stability
+2026-08-24 13:28:11,"I wish the drag and drop was smoother, it feels clunky.",in_app_survey,3,ui_ux
+2026-08-24 13:35:59,Subject: Issue report. Loved the guided walkthrough for new users.,support_ticket,4,onboarding
+2026-08-24 13:38:26,The search feature is slow and often times out.,support_ticket,1,performance_speed
+2026-08-24 13:43:02,Crashes whenever I try to attach a file to a task.,in_app_survey,1,crashes_stability
+2026-08-24 13:51:17,"Onboarding was smooth, got set up in under five minutes.",twitter,3,onboarding
+2026-08-24 13:56:40,"Subject: Issue report. Simple, reliable, and does exactly what I need.",support_ticket,5,general_positive
+2026-08-24 14:09:54,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-24 14:18:12,Crashes whenever I try to attach a file to a task.,google_play,2,crashes_stability
+2026-08-24 14:39:18,"Used to crash constantly, but the latest update fixed it for me.",app_store,2,crashes_stability
+2026-08-24 14:45:34,hey @TaskFlowApp TaskFlow crashed twice today and I lost my unsaved notes.,twitter,1,crashes_stability
+2026-08-24 14:59:33,Subject: Issue report. Everything lags when I have more than 50 items in a list.,support_ticket,2,performance_speed
+2026-08-24 15:02:37,TaskFlow crashed twice today and I lost my unsaved notes.,support_ticket,2,crashes_stability
+2026-08-24 15:13:13,"Onboarding was smooth, got set up in under five minutes.",in_app_survey,2,onboarding
+2026-08-24 15:21:00,Dark mode please! My eyes hurt using this at night.,in_app_survey,4,ui_ux
+2026-08-24 15:37:15,Please add support for Slack notifications.,twitter,3,feature_requests
+2026-08-24 15:52:29,"Real-time sync is great, changes show up instantly on all my devices.",app_store,5,data_sync
+2026-08-24 15:57:09,"Got double charged after upgrading my plan, need a refund immediately.",google_play,1,billing_payments
+2026-08-24 16:18:57,The pricing page doesn't match what I was actually billed.,app_store,1,billing_payments
+2026-08-24 16:20:12,@TaskFlowApp Cancelled my subscription but still got charged this month.,twitter,1,billing_payments
+2026-08-24 16:22:21,"Simple, reliable, and does exactly what I need.",app_store,4,general_positive
+2026-08-24 16:27:30,"Five stars, this has saved me so much time every week.",in_app_survey,5,general_positive
+2026-08-24 16:30:26,"Used to crash constantly, but the latest update fixed it for me.",app_store,1,crashes_stability
+2026-08-24 16:31:52,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,1,crashes_stability
+2026-08-24 16:34:03,"Font is too small on mobile, hard to read.",twitter,3,ui_ux
+2026-08-24 16:34:22,"The app is so slow, it takes forever to load my tasks.",app_store,1,performance_speed
+2026-08-24 16:53:49,"Stability has gotten so much better, no crashes in weeks!",app_store,1,crashes_stability
+2026-08-24 16:57:50,"hey @TaskFlowApp It froze and then crashed while syncing, very frustrating.",twitter,2,crashes_stability
+2026-08-24 17:10:12,Everything lags when I have more than 50 items in a list.,in_app_survey,1,performance_speed
+2026-08-24 17:17:50,hey @TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-24 17:27:42,"It froze and then crashed while syncing, very frustrating.",app_store,1,crashes_stability
+2026-08-24 18:04:09,Subject: Issue report. Any plans to add a native mobile widget?,support_ticket,3,feature_requests
+2026-08-24 18:05:55,Finally sync works flawlessly across all my devices now.,support_ticket,2,data_sync
+2026-08-24 18:07:58,"The app is so slow, it takes forever to load my tasks.",google_play,1,performance_speed
+2026-08-24 18:15:52,"App crashes on launch since the last update, completely unusable.",in_app_survey,1,crashes_stability
+2026-08-24 18:20:59,Cancelled my subscription but still got charged this month.,google_play,1,billing_payments
+2026-08-24 18:21:22,The search feature is slow and often times out.,app_store,1,performance_speed
+2026-08-24 18:49:52,"Stability has gotten so much better, no crashes in weeks!",google_play,2,crashes_stability
+2026-08-24 18:52:34,"Used to crash constantly, but the latest update fixed it for me.",app_store,1,crashes_stability
+2026-08-24 19:00:11,TaskFlow crashed twice today and I lost my unsaved notes.,app_store,2,crashes_stability
+2026-08-24 19:15:23,The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-24 19:43:18,"hey @TaskFlowApp Stability has gotten so much better, no crashes in weeks!",twitter,1,crashes_stability
+2026-08-24 19:53:14,"App crashes on launch since the last update, completely unusable.",support_ticket,1,crashes_stability
+2026-08-24 20:13:25,"It froze and then crashed while syncing, very frustrating.",in_app_survey,1,crashes_stability
+2026-08-24 20:27:22,"Really clean and minimal design, easy to use.",in_app_survey,3,ui_ux
+2026-08-24 20:28:28,"Constant crashing on my Android phone, please fix this ASAP.",google_play,1,crashes_stability
+2026-08-24 20:41:20,"App crashes on launch since the last update, completely unusable.",app_store,1,crashes_stability
+2026-08-24 20:52:00,"Overcharged on my credit card, this is unacceptable.",support_ticket,1,billing_payments
+2026-08-24 21:11:55,"Stability has gotten so much better, no crashes in weeks!",google_play,1,crashes_stability
+2026-08-24 21:12:33,The app keeps crashing every time I try to open the dashboard.,google_play,1,crashes_stability
+2026-08-24 21:13:31,"App crashes on launch since the last update, completely unusable.",app_store,1,crashes_stability
+2026-08-24 21:33:02,"Really clean and minimal design, easy to use.",google_play,3,ui_ux
+2026-08-24 21:52:11,"Billing is confusing, I can't tell what plan I'm on.",in_app_survey,1,billing_payments
+2026-08-24 21:57:47,Subject: Issue report. The tutorial doesn't explain how to invite team members.,support_ticket,2,onboarding
+2026-08-24 22:06:47,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,2,crashes_stability
+2026-08-24 22:14:49,"Really clean and minimal design, easy to use.",app_store,4,ui_ux
+2026-08-24 22:16:24,"Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-24 22:19:10,"Best productivity app I've used in years, highly recommend.",in_app_survey,5,general_positive
+2026-08-24 22:22:25,"App crashes on launch since the last update, completely unusable.",app_store,2,crashes_stability
+2026-08-24 22:36:25,"Simple, reliable, and does exactly what I need.",support_ticket,5,general_positive
+2026-08-24 22:42:07,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,2,crashes_stability
+2026-08-24 22:43:27,"Confusing setup process, I almost gave up before figuring it out.",app_store,2,onboarding
+2026-08-24 23:03:20,"It froze and then crashed while syncing, very frustrating.",twitter,1,crashes_stability
+2026-08-24 23:14:02,Crashes whenever I try to attach a file to a task.,in_app_survey,1,crashes_stability
+2026-08-24 23:49:50,"Stability has gotten so much better, no crashes in weeks!",google_play,2,crashes_stability
+2026-08-24 23:53:57,"Used to crash constantly, but the latest update fixed it for me.",google_play,1,crashes_stability
+2026-08-24 23:57:57,"hey @TaskFlowApp Used to crash constantly, but the latest update fixed it for me.",twitter,2,crashes_stability
+2026-08-25 00:04:33,hey @TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-25 00:10:33,"App crashes on launch since the last update, completely unusable.",support_ticket,1,crashes_stability
+2026-08-25 00:14:53,"Stability has gotten so much better, no crashes in weeks!",google_play,2,crashes_stability
+2026-08-25 00:52:20,"Hope you add offline mode soon, I travel a lot without wifi.",google_play,2,feature_requests
+2026-08-25 00:56:21,"App crashes on launch since the last update, completely unusable.",app_store,2,crashes_stability
+2026-08-25 01:00:20,"Stability has gotten so much better, no crashes in weeks!",twitter,2,crashes_stability
+2026-08-25 01:14:00,"The new UI is confusing, I can't find the settings anymore.",google_play,2,ui_ux
+2026-08-25 01:29:03,The app keeps crashing every time I try to open the dashboard.,app_store,2,crashes_stability
+2026-08-25 01:36:13,Crashes whenever I try to attach a file to a task.,google_play,1,crashes_stability
+2026-08-25 01:37:39,"The app is so slow, it takes forever to load my tasks.",app_store,1,performance_speed
+2026-08-25 01:42:06,"Constant crashing on my Android phone, please fix this ASAP.",app_store,2,crashes_stability
+2026-08-25 01:47:06,"@TaskFlowApp App crashes on launch since the last update, completely unusable.",twitter,2,crashes_stability
+2026-08-25 02:23:24,"App crashes on launch since the last update, completely unusable.",twitter,2,crashes_stability
+2026-08-25 02:33:56,"Used to crash constantly, but the latest update fixed it for me.",support_ticket,1,crashes_stability
+2026-08-25 02:55:35,I was billed twice this month for the same subscription.,support_ticket,2,billing_payments
+2026-08-25 02:59:02,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-25 03:02:14,"Subject: Issue report. Quick and friendly support, solved my sync issue right away.",support_ticket,3,customer_support
+2026-08-25 03:08:54,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,2,crashes_stability
+2026-08-25 03:08:55,"hey @TaskFlowApp Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-25 03:14:15,TaskFlow crashed twice today and I lost my unsaved notes.,app_store,1,crashes_stability
+2026-08-25 03:14:40,"Five stars, this has saved me so much time every week.",google_play,5,general_positive
+2026-08-25 03:52:51,The app keeps crashing every time I try to open the dashboard.,app_store,2,crashes_stability
+2026-08-25 04:08:32,Can you add a dark mode option please?,app_store,4,feature_requests
+2026-08-25 04:18:53,"Subject: Issue report. Stability has gotten so much better, no crashes in weeks!",support_ticket,2,crashes_stability
+2026-08-25 04:21:32,@TaskFlowApp I wish there was a way to export my tasks to PDF.,twitter,3,feature_requests
+2026-08-25 04:26:29,Loved the guided walkthrough for new users.,in_app_survey,5,onboarding
+2026-08-25 04:34:06,"App crashes on launch since the last update, completely unusable.",in_app_survey,1,crashes_stability
+2026-08-25 04:42:31,"Constant crashing on my Android phone, please fix this ASAP.",twitter,1,crashes_stability
+2026-08-25 04:53:08,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,2,crashes_stability
+2026-08-25 05:10:50,Loading spinner just spins forever on the reports page.,google_play,1,performance_speed
+2026-08-25 05:19:12,Subject: Issue report. The app keeps crashing every time I try to open the dashboard.,support_ticket,2,crashes_stability
+2026-08-25 05:37:34,"Stability has gotten so much better, no crashes in weeks!",app_store,1,crashes_stability
+2026-08-25 05:45:40,"hey @TaskFlowApp It froze and then crashed while syncing, very frustrating.",twitter,1,crashes_stability
+2026-08-25 05:45:42,hey @TaskFlowApp I wish there was a way to export my tasks to PDF.,twitter,2,feature_requests
+2026-08-25 06:10:39,@TaskFlowApp TaskFlow crashed twice today and I lost my unsaved notes.,twitter,2,crashes_stability
+2026-08-25 06:12:34,"Confusing setup process, I almost gave up before figuring it out.",support_ticket,2,onboarding
+2026-08-25 06:14:22,"It froze and then crashed while syncing, very frustrating.",in_app_survey,1,crashes_stability
+2026-08-25 07:02:19,"Used to crash constantly, but the latest update fixed it for me.",app_store,2,crashes_stability
+2026-08-25 07:41:44,"It froze and then crashed while syncing, very frustrating.",app_store,2,crashes_stability
+2026-08-25 07:46:57,I wish there was a way to export my tasks to PDF.,in_app_survey,4,feature_requests
+2026-08-25 08:12:19,Sync is painfully slow between my phone and laptop.,support_ticket,1,performance_speed
+2026-08-25 08:38:21,Cancelled my subscription but still got charged this month.,app_store,1,billing_payments
+2026-08-25 08:45:21,"hey @TaskFlowApp Performance has improved a lot, loads instantly now.",twitter,3,performance_speed
+2026-08-25 08:47:43,Crashes whenever I try to attach a file to a task.,in_app_survey,1,crashes_stability
+2026-08-25 09:29:35,"App crashes on launch since the last update, completely unusable.",app_store,1,crashes_stability
+2026-08-25 09:52:59,"Login now works great with Face ID, very convenient.",in_app_survey,5,security_login
+2026-08-25 10:13:14,"Stability has gotten so much better, no crashes in weeks!",twitter,2,crashes_stability
+2026-08-25 11:04:23,"Great value for the price, worth every penny.",in_app_survey,4,general_positive
+2026-08-25 11:10:06,"Lost my data after the app crashed during a sync, need this fixed.",google_play,2,data_sync
+2026-08-25 11:19:21,"I wish the drag and drop was smoother, it feels clunky.",app_store,3,ui_ux
+2026-08-25 11:25:10,"Confusing setup process, I almost gave up before figuring it out.",support_ticket,4,onboarding
+2026-08-25 11:33:03,@TaskFlowApp Support rep was rude and unhelpful when I asked for a refund.,twitter,3,customer_support
+2026-08-25 11:38:13,The app keeps crashing every time I try to open the dashboard.,in_app_survey,2,crashes_stability
+2026-08-25 12:00:33,@TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-25 12:01:22,"@TaskFlowApp Used to crash constantly, but the latest update fixed it for me.",twitter,1,crashes_stability
+2026-08-25 12:07:29,Worried about security after seeing this app doesn't support 2FA properly.,in_app_survey,1,security_login
+2026-08-25 12:14:20,TaskFlow crashed twice today and I lost my unsaved notes.,in_app_survey,1,crashes_stability
+2026-08-25 12:33:56,Would be nice to have recurring task templates.,google_play,2,feature_requests
+2026-08-25 12:48:14,Crashes whenever I try to attach a file to a task.,app_store,1,crashes_stability
+2026-08-25 12:54:48,"App crashes on launch since the last update, completely unusable.",app_store,1,crashes_stability
+2026-08-25 13:05:37,"Great customer service, they walked me through the whole setup.",app_store,4,customer_support
+2026-08-25 13:47:55,"Constant crashing on my Android phone, please fix this ASAP.",google_play,1,crashes_stability
+2026-08-25 14:48:07,Subject: Issue report. Crashes whenever I try to attach a file to a task.,support_ticket,1,crashes_stability
+2026-08-25 14:54:45,hey @TaskFlowApp The tutorial doesn't explain how to invite team members.,twitter,3,onboarding
+2026-08-25 15:00:17,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,1,crashes_stability
+2026-08-25 15:07:44,"Subject: Issue report. Quick and friendly support, solved my sync issue right away.",support_ticket,4,customer_support
+2026-08-25 15:07:48,"Subject: Issue report. App crashes on launch since the last update, completely unusable.",support_ticket,1,crashes_stability
+2026-08-25 16:31:14,Subject: Issue report. The app keeps crashing every time I try to open the dashboard.,support_ticket,1,crashes_stability
+2026-08-25 16:31:37,"Really clean and minimal design, easy to use.",google_play,4,ui_ux
+2026-08-25 16:46:06,"Real-time sync is great, changes show up instantly on all my devices.",app_store,5,data_sync
+2026-08-25 17:05:45,Please add support for Slack notifications.,in_app_survey,4,feature_requests
+2026-08-25 17:10:46,Crashes whenever I try to attach a file to a task.,in_app_survey,2,crashes_stability
+2026-08-25 17:24:32,"Billing is confusing, I can't tell what plan I'm on.",in_app_survey,1,billing_payments
+2026-08-25 17:46:34,"Used to crash constantly, but the latest update fixed it for me.",in_app_survey,1,crashes_stability
+2026-08-25 18:22:12,hey @TaskFlowApp The app keeps crashing every time I try to open the dashboard.,twitter,1,crashes_stability
+2026-08-25 19:20:16,Please add integration with Google Calendar.,in_app_survey,2,feature_requests
+2026-08-25 19:58:51,"Can't log in after resetting my password, keeps saying invalid credentials.",app_store,2,security_login

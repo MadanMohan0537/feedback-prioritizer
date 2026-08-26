@@ -1,6 +1,4 @@
-__pycache__/
+﻿__pycache__/
 *.pyc
 .streamlit/
-models/*.pkl
 *.log
-.DS_Store

@@ -36,6 +36,55 @@ the same problem even at equal volume).
 
 ## Architecture
 
+```
+┌─────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  CSV replay /   │────▶│  Sentiment       │────▶│  Rolling window  │
+│  stream gen     │     │  (RoBERTa/VADER) │     │  (last N msgs)   │
+└─────────────────┘     └──────────────────┘     └────────┬─────────┘
+                                                          │ every N msgs
+                                                          ▼
+                                                ┌──────────────────┐
+                                                │  Topic model     │
+                                                │  BERTopic /      │
+                                                │  TF-IDF+KMeans   │
+                                                └────────┬─────────┘
+                                                         │
+                                                         ▼
+┌─────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│  Streamlit      │◀────│  Prioritization  │◀────│  Business impact │
+│  live dashboard │     │  (freq×sent×imp) │     │  keyword weights │
+└─────────────────┘     └──────────────────┘     └──────────────────┘
+```
+
+| Stage | Module | What it does |
+|-------|--------|--------------|
+| Ingest | `src/ingest.py` | Replays `data/sample_reviews.csv` as a near-real-time generator / batch puller |
+| Sentiment | `src/sentiment.py` | Labels + polarity (−1..1); RoBERTa preferred, VADER fallback |
+| Topics | `src/topic_model.py` | BERTopic (embeddings→UMAP→HDBSCAN→c-TF-IDF) or TF-IDF/KMeans |
+| Prioritize | `src/prioritize.py` | Weighted score + feature-request split |
+| Orchestrate | `src/pipeline.py` | Rolling window, retrain cadence, shared by app + tests |
+| Dashboard | `app.py` | Live KPIs, ranked lists, trends, word clouds |
+
+## How a PM uses this (Voice of Customer command center)
+
+1. **Spot emerging issues before they become crises.** Watch the Critical
+   Issues KPI and the priority bar chart. A sudden climb in a high-impact
+   topic (crashes, billing, login) is a page-worthy signal — not a weekly
+   report.
+2. **Validate feature requests with data.** Feature requests are split into
+   their own ranked list (detected via phrases like “I wish”, “please add”,
+   “would be nice”). Demand is frequency × request purity, so a clean
+   “dark mode” cluster outranks a mixed bag of one-off wishes.
+3. **Decide what to build next from aggregated pain.** Use the weight
+   sliders: during a launch week, crank **Business impact**; during a
+   quiet period, lean on **Frequency** to find chronic friction. Expand a
+   topic to read representative quotes before opening a ticket.
+4. **Integrate with the tools you already live in.** In production you’d
+   auto-file a Jira epic/bug when priority crosses a threshold, and post a
+   Slack digest to `#voice-of-customer` with the top 3 issues, example
+   quotes, and a trend sparkline — so the dashboard pages you, rather than
+   waiting to be checked.
+
 ## Running it
 
 ```bash
@@ -44,24 +93,35 @@ python data/generate_sample_data.py     # regenerate sample_reviews.csv
 streamlit run app.py
 ```
 
-In the sidebar: **Play** starts the simulated stream (replays the CSV at a
-configurable rate), **Step** advances one batch manually, and the
-prioritization weights are live sliders — drag "Business impact" up during
-a launch week to see the ranked list re-sort instantly, no retrain needed
-(only topic modeling requires retraining; scoring is cheap and recomputed
-on every interaction).
+In the sidebar:
+
+- **Play** starts the simulated stream (replays the CSV at a configurable rate)
+- **Step** advances one batch manually
+- **Bootstrap 40 msgs** fast-forwards so charts populate immediately
+- Prioritization weight sliders re-sort the ranked list instantly (no retrain)
 
 ### Minimal install (no heavy ML deps)
 
 The app runs with just `streamlit pandas plotly numpy scikit-learn
-vaderSentiment` — sentiment falls back to VADER and topics fall back to
-TF-IDF/KMeans. This is enough to demo the full pipeline end-to-end.
+vaderSentiment wordcloud matplotlib` — sentiment falls back to VADER and
+topics fall back to TF-IDF/KMeans. This is enough to demo the full pipeline
+end-to-end.
 
 ### Full install (BERTopic + transformer sentiment)
 
-Add `torch transformers sentence-transformers bertopic umap-learn hdbscan`.
-First run will download the embedding model (~90MB) and the sentiment model
-(~500MB) from Hugging Face, so it needs network access once.
+```bash
+pip install torch transformers sentence-transformers bertopic umap-learn hdbscan
+```
+
+First run downloads the embedding model (~90MB) and the sentiment model
+(~500MB) from Hugging Face.
+
+### Smoke test
+
+```bash
+python tests/smoke_test.py
+python tests/test_prioritize.py
+```
 
 ## Design decisions & tradeoffs
 
@@ -80,7 +140,7 @@ First run will download the embedding model (~90MB) and the sentiment model
   "impact matters more than volume this week" directly.
 - **Feature requests are split out, not penalized.** A message like "please
   add dark mode" is neutral-to-positive in sentiment but still a strong
-  signal — it's ranked by frequency within its own list rather than folded
+  signal — it's ranked by demand within its own list rather than folded
   into the negativity-driven issue ranking.
 - **Everything degrades gracefully.** A demo/portfolio project that hard-
   requires a GPU and Hugging Face network access to even boot is a bad demo.
@@ -129,3 +189,29 @@ First run will download the embedding model (~90MB) and the sentiment model
 - **Scale:** BERTopic + sentence-transformers comfortably handles tens of
   thousands of messages per batch on CPU; beyond that, move embeddings to a
   GPU inference service and shard clustering by time window or product area.
+
+## Repo structure
+
+```
+feedback-analyzer/
+├── data/
+│   ├── generate_sample_data.py
+│   └── sample_reviews.csv
+├── src/
+│   ├── ingest.py          # simulation generator
+│   ├── topic_model.py     # BERTopic / TF-IDF wrapper
+│   ├── sentiment.py       # sentiment classifier
+│   ├── prioritize.py      # scoring and ranking
+│   ├── pipeline.py        # rolling-window orchestrator
+│   └── config.py          # parameters
+├── app.py                 # Streamlit dashboard
+├── notebooks/
+│   └── exploratory_analysis.ipynb
+├── tests/
+│   ├── smoke_test.py
+│   └── test_prioritize.py
+├── screenshots/
+│   └── dashboard.png
+├── requirements.txt
+└── README.md
+```

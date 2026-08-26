@@ -121,9 +121,21 @@ def compute_priorities(enriched_items, topic_info, weights=None):
     return results
 
 
+def feature_request_score(topic_summary: dict) -> float:
+    """
+    Rank feature-request clusters by demand (frequency) with a small boost
+    for how cleanly the cluster is "request-shaped" (pct_feature_request).
+    Positive sentiment is fine here — people asking for features are often
+    otherwise happy customers.
+    """
+    demand = topic_summary.get("count", 0)
+    purity = topic_summary.get("pct_feature_request", 0) / 100.0
+    return demand * (0.7 + 0.3 * purity)
+
+
 def split_issues_and_requests(priority_list):
     """Convenience split for the dashboard's two ranked lists."""
     issues = [r for r in priority_list if not r["is_feature_request"]]
     requests = [r for r in priority_list if r["is_feature_request"]]
-    requests.sort(key=lambda r: r["count"], reverse=True)
+    requests.sort(key=feature_request_score, reverse=True)
     return issues, requests

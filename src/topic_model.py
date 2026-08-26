@@ -121,9 +121,17 @@ class SimpleTopicModel(BaseTopicModel):
         from sklearn.cluster import KMeans
 
         n_topics = min(self.n_topics, max(2, len(docs) // 5))
+        # Prefer 1-2 word phrases so labels read like themes ("dark mode")
+        # rather than bag-of-words noise ("every, time, try").
         vectorizer = TfidfVectorizer(
-            tokenizer=_tokenize, preprocessor=lambda x: x, lowercase=False,
-            max_df=0.9, min_df=1,
+            tokenizer=_tokenize,
+            preprocessor=lambda x: x,
+            token_pattern=None,
+            lowercase=False,
+            ngram_range=(1, 2),
+            max_df=0.85,
+            min_df=1,
+            max_features=5000,
         )
         X = vectorizer.fit_transform(docs)
         km = KMeans(n_clusters=n_topics, random_state=42, n_init=10)
@@ -135,10 +143,14 @@ class SimpleTopicModel(BaseTopicModel):
         topic_info = {}
         counts = Counter(labels)
         for tid in range(n_topics):
-            top_terms = [terms[i] for i in order_centroids[tid, :6] if i < len(terms)]
+            top_terms = [terms[i] for i in order_centroids[tid, :8] if i < len(terms)]
+            # Prefer bigrams in the display label when available.
+            bigrams = [t for t in top_terms if " " in t]
+            unigrams = [t for t in top_terms if " " not in t]
+            label_terms = (bigrams + unigrams)[:3]
             topic_info[tid] = {
-                "label": ", ".join(top_terms[:3]) if top_terms else f"Topic {tid}",
-                "keywords": top_terms,
+                "label": ", ".join(label_terms) if label_terms else f"Topic {tid}",
+                "keywords": top_terms[:6],
                 "size": int(counts.get(tid, 0)),
             }
         return list(labels), topic_info

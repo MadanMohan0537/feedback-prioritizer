@@ -2,3 +2,9 @@
 *.pyc
 .streamlit/
 *.log
+.venv/
+venv/
+models/*.bin
+models/*.pkl
+.ipynb_checkpoints/
+.DS_Store

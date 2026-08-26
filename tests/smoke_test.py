@@ -10,10 +10,12 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from collections import Counter
+
 from src.ingest import load_feedback_rows
-from src.sentiment import get_analyzer
-from src.topic_model import build_topic_model
-from src.prioritize import compute_priorities, split_issues_and_requests
+from src.pipeline import FeedbackPipeline
+from src.prioritize import split_issues_and_requests
+from src.sentiment import SentimentAnalyzer
 
 
 def main():
@@ -21,32 +23,25 @@ def main():
     print(f"Loaded {len(rows)} feedback rows")
 
     sample = rows[:200]
-    analyzer = get_analyzer()
+    # Prefer VADER in CI / offline environments so the smoke test never
+    # blocks on a Hugging Face download.
+    analyzer = SentimentAnalyzer(prefer_transformer=False)
+    pipe = FeedbackPipeline(analyzer=analyzer, min_messages=15, retrain_every=50)
 
-    enriched = []
-    for i, row in enumerate(sample):
-        res = analyzer.analyze(row["text"])
-        enriched.append({
-            "id": i, "text": row["text"], "source": row["source"],
-            "timestamp": row["timestamp"], "polarity": res.polarity,
-            "sentiment_label": res.label,
-        })
-    print(f"Sentiment backend: {analyzer._backend}")
-    from collections import Counter
-    print("Sentiment distribution:", Counter(e["sentiment_label"] for e in enriched))
+    items = [{
+        "id": i, "text": row["text"], "source": row["source"],
+        "timestamp": row["timestamp"], "rating": row.get("rating"),
+    } for i, row in enumerate(sample)]
+    pipe.ingest(items, force_retrain=True)
 
-    model = build_topic_model()
-    docs = [e["text"] for e in enriched]
-    topic_ids, topic_info = model.fit_transform(docs)
-    for e, tid in zip(enriched, topic_ids):
-        e["topic_id"] = int(tid)
-    print(f"Topic backend: {model.name}")
-    print(f"Discovered {len([t for t in topic_info if t not in (-1,)])} topics")
-    for tid, info in sorted(topic_info.items(), key=lambda kv: -kv[1]["size"])[:5]:
+    print(f"Sentiment backend: {pipe.sentiment_backend}")
+    print("Sentiment distribution:", Counter(e["sentiment_label"] for e in pipe.history))
+    print(f"Topic backend: {pipe.model_backend}")
+    print(f"Discovered {len([t for t in pipe.topic_info if t not in (-1,)])} topics")
+    for tid, info in sorted(pipe.topic_info.items(), key=lambda kv: -kv[1]["size"])[:5]:
         print(f"  topic {tid}: {info['label']}  (n={info['size']})")
 
-    priorities = compute_priorities(enriched, topic_info)
-    issues, requests = split_issues_and_requests(priorities)
+    issues, requests = split_issues_and_requests(pipe.priorities)
 
     print("\nTop 5 prioritized issues:")
     for i in issues[:5]:
@@ -57,8 +52,8 @@ def main():
     for r in requests[:5]:
         print(f"  [{r['count']} mentions] {r['label']}")
 
-    assert len(enriched) == 200
-    assert priorities, "Expected at least one prioritized topic"
+    assert len(pipe.history) == 200
+    assert pipe.priorities, "Expected at least one prioritized topic"
     print("\nSmoke test passed.")
 
 

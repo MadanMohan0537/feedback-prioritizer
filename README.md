@@ -1,84 +1,91 @@
-﻿# Feedback Prioritizer
+# Feedback Prioritizer
 
-**Real-time customer feedback analysis with topic modeling, sentiment scoring, and PM-grade prioritization.**
+Turn a pile of scattered customer feedback into a ranked, defensible "fix this first" list — automatically.
 
-A streaming pipeline that ingests customer feedback (reviews, tickets, social mentions), automatically identifies what customers are talking about and how they feel about it, and surfaces a ranked, actionable issue/feature-request list on a live Streamlit dashboard.
+Most feedback tools either dump raw reviews on you or bury a real signal under a generic sentiment score. This one goes a step further: it clusters incoming feedback into topics on its own, scores how customers feel about each one, and combines that with *how often it's mentioned* and *how much it costs the business* into a single priority number. Point it at your own CSV, or replay the bundled 650-row demo dataset to see it work end to end in under a minute.
 
-## Table of contents
+## Why this exists
 
-- [Problem statement](#problem-statement)
-- [Who this is for](#who-this-is-for)
-- [Demo](#demo)
-- [How it works](#how-it-works)
-- [Quickstart](#quickstart)
-- [Repo structure](#repo-structure)
-- [The prioritization formula](#the-prioritization-formula)
-- [Design decisions](#design-decisions--tradeoffs)
-- [Known limitations](#known-limitations-and-how-theyd-be-addressed-in-production)
-- [Extending to production](#extending-to-production)
-- [Tech stack](#tech-stack)
+A support inbox, an app-store review feed, and a Twitter mentions column all say something true about your product, but nobody reads all three every day. By the time a pattern is obvious to a human, it's usually already costing you retention. This tool is meant to sit where a PM or support lead would otherwise be manually skimming — it reads everything, groups it, and hands back a short list worth acting on today.
 
-## Problem statement
+## What it does
 
-Feedback about a product arrives everywhere — app store reviews, support tickets, tweets, in-app surveys — and by the time a PM manually reads enough of it to notice a pattern, the pattern is usually already a fire. This tool closes that loop: it clusters incoming feedback into topics automatically, scores sentiment per message, and computes a priority score that blends *how often* something is mentioned, *how negative* it is, and *how much it matters to the business* — a UI nitpick and a billing double-charge are not the same problem even at equal volume.
+1. **Ingests** feedback as a stream — either the included synthetic dataset (650 reviews for a fictional app, "TaskFlow," across 14 days) or a CSV you upload directly in the sidebar.
+2. **Scores sentiment** on each message as it arrives, using a transformer model tuned on informal text, with an automatic fallback to a lexicon-based analyzer if no GPU/network is available.
+3. **Discovers topics** on a rolling window of recent messages — no predefined category list, no manual tagging.
+4. **Prioritizes** each topic with a transparent formula that blends volume, negativity, and a business-impact signal (crashes and billing bugs outrank UI nitpicks, even at equal mention count).
+5. **Separates feature requests from complaints** automatically, so "please add dark mode" doesn't get buried under bug reports just because its sentiment reads neutral.
+6. **Displays it all live** on a Streamlit dashboard: a ranked issue list, a live feed, trend charts, and topic word clouds.
 
-## Who this is for
+## Try it
 
-- **Product managers** who want to know, this week, what the top three things breaking or delighting customers are — without reading 600 reviews.
-- **Support leads** who want an emerging issue (a spike in "crashes") surfaced before ticket volume explodes.
-- **Eng leads** who want feature requests separated from bug reports and ranked by demand, not by whoever shouted loudest in Slack.
+```bash
+git clone https://github.com/MadanMohan0537/feedback-prioritizer.git
+cd feedback-prioritizer
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-**Success looks like:** time-to-detect an emerging issue dropping from days (waiting for a manual ticket-trend report) to hours; more roadmap decisions citing an aggregated feedback signal instead of anecdote; fewer duplicate tickets triaged by hand because clustering already grouped them.
+Open the local URL Streamlit prints, hit **Play** in the sidebar, and watch the priority list build itself. To use your own data instead of the demo set, open the **"Use your own data"** panel in the sidebar and upload a CSV with at minimum a `text` column (a `timestamp` and `source` column are used if present, and are auto-filled otherwise).
 
-## Demo
+No GPU required. The full transformer + BERTopic stack is used automatically when installed and reachable; otherwise the app runs the same pipeline on lightweight fallbacks (VADER sentiment, TF-IDF/KMeans topics) with zero code changes and no loss of functionality — just simpler models. The active backend for each stage is always shown in the sidebar.
 
-Run `streamlit run app.py` and use the sidebar to replay the included sample dataset (650 synthetic reviews for a fictional productivity app, "TaskFlow," across 14 days). **Play** streams messages in continuously; **Step** advances one batch at a time so you can watch scores update. The dashboard has four views:
+## The prioritization formula
 
-- **Prioritized Issues & Requests** — ranked bar charts and expandable cards, each backed by real example messages
-- **Live Feed** — the raw stream as it's scored, color-coded by sentiment
-- **Trends** — sentiment distribution, topic frequency over time, sentiment over time
-- **Topic Explorer** — a word cloud per discovered topic
+```
+priority_score = 100 × ( w_freq × frequency_norm
+                        + w_sent × negativity_norm
+                        + w_impact × impact_norm )
+```
 
-## How it works
+- `frequency_norm` — how often the topic comes up, relative to everything else currently in view.
+- `negativity_norm` — how negative the topic reads on average; more negative scores higher.
+- `impact_norm` — a business-impact weight from keyword signals (`crash`, `billing`, `security` score highest; `ui`, `design` score lowest).
 
-- **`frequency_norm`** — the topic's message count, min-max normalized against every other topic currently in view, so volume is relative rather than absolute.
-- **`negativity_norm`** — derived from average sentiment polarity (`-1` to `+1`), rescaled so *more negative* topics score *higher*. This is a complaint prioritizer: negative + frequent + high-impact bubbles to the top.
-- **`impact_norm`** — the average business-impact weight of the topic's messages, from a keyword match (`crash`, `billing`, `security` → 1.0 severe; `slow`, `bug`, `sync` → 0.6 moderate; `ui`, `design` → 0.3 minor; unmatched → 0.15 neutral default).
+All three weights are live sliders in the dashboard, not hardcoded — drag "business impact" up during a launch week and the ranked list re-sorts instantly, no retrain needed. Defaults live in `src/config.py`.
 
-Default weights (`w_freq=0.40, w_sent=0.35, w_impact=0.25`) live in `src/config.py` and are also exposed as live sliders in the dashboard sidebar, so a PM can express "impact matters more than volume this week" without touching code — the ranked list re-sorts instantly, no model retrain required.
+## What's new (v1.1)
 
-**Feature requests are tracked separately, not penalized.** A topic is classified as a feature-request cluster when >=40% of its messages match request phrases ("I wish," "please add," "would be nice," "any plans to add," etc.). These are ranked by frequency rather than negativity — "please add dark mode" is neutral-to-positive sentiment but still a strong demand signal.
+- **Bring your own data.** Upload a CSV directly in the sidebar instead of only replaying the bundled demo set.
+- **Minimum-priority filter.** A slider on the Issues tab lets you hide low-priority noise and focus the chart on what's actually worth discussing.
 
-## Design decisions & tradeoffs
+## Project layout
 
-- **Batch retraining over incremental updates.** BERTopic supports online-update patterns, but topic IDs can drift or renumber between updates in ways that are confusing on a live dashboard. Instead, the model re-fits on the rolling window every `RETRAIN_EVERY_N` new messages (default 20) — cheap at this data volume, and topic labels stay stable within a window. At production scale this step would move to an async batch job (e.g. a scheduled Spark/Airflow task) instead of running inline on the request thread.
-- **Everything degrades gracefully.** A demo that hard-requires a GPU and Hugging Face network access just to boot is a bad demo. Every model-backed stage — sentiment and topic modeling — has a lexicon/statistical fallback, so the pipeline is always runnable, and the sidebar always shows which backend actually served the current session.
+```
+feedback-prioritizer/
+├── app.py                        # Streamlit dashboard
+├── src/
+│   ├── ingest.py                 # stream simulation + batch pull
+│   ├── sentiment.py              # transformer sentiment + VADER fallback
+│   ├── topic_model.py            # BERTopic + TF-IDF/KMeans fallback
+│   ├── prioritize.py             # scoring, ranking, feature-request detection
+│   └── config.py                 # every tunable in one place
+├── data/
+│   ├── generate_sample_data.py   # synthetic demo dataset generator
+│   └── sample_reviews.csv
+├── tests/
+│   └── smoke_test.py             # end-to-end check without launching Streamlit
+└── requirements.txt
+```
 
-## Known limitations (and how they'd be addressed in production)
+## Honest limitations
 
-- **Sarcasm and mixed sentiment in one message** ("oh great, ANOTHER crash") are not reliably handled by either sentiment backend — both are trained for direct sentiment, not irony. A production system would add a sarcasm-detection pass or route ambiguous cases to human review. Similarly, "love the design but it keeps crashing" resolves to one dominant polarity score rather than two aspect-level scores; true aspect-based sentiment analysis (ABSA) would split this correctly.
-- **Topic granularity depends on cluster-size parameters** (`min_topic_size` for BERTopic, `n_topics` for the fallback). Too coarse merges distinct issues together; too fine fragments one issue into near-duplicate clusters. This needs periodic human review of topic labels, especially after a product change shifts what people write about.
-- **Business-impact keywords are hand-curated**, not learned. A more robust version would train impact weights from historical outcome data (e.g. correlating topics with churn or refund-request rates) rather than a static keyword list.
-- **Synthetic demo data.** `sample_reviews.csv` is generated, not scraped, to avoid licensing/ToS issues with real app-store or social data in a public repo. Swapping in a real dataset only requires matching the `timestamp, text, source` schema.
+- Sarcasm and mixed-sentiment messages ("love the design but it keeps crashing") aren't split correctly by either sentiment backend — both resolve to one dominant score. True aspect-based sentiment analysis would fix this.
+- Topic granularity is sensitive to cluster-size parameters; too coarse merges distinct issues, too fine fragments one issue into duplicates. Worth a periodic human pass on topic labels.
+- Business-impact weights are a hand-curated keyword list, not learned from outcome data (churn, refunds). A production version should train these.
+- The bundled dataset is synthetic, generated to avoid scraping-and-licensing headaches in a public repo — swap in real data by matching the `text`/`timestamp`/`source` schema.
 
-## Extending to production
+## Where this goes next
 
-- **Ingestion** — replace `src/ingest.py`'s CSV replay with a Kafka consumer, or a Twitter API v2 / Reddit API / Zendesk webhook, keeping the same `{timestamp, text, source}` item shape everything downstream already expects.
-- **Storage** — persist enriched messages (topic, sentiment, impact) to a real-time-queryable store (Postgres + TimescaleDB, or a warehouse with a streaming ingest path) instead of in-memory `st.session_state`.
-- **Topic model serving** — move retraining to an async worker; serve the latest fitted model via a small internal API so the dashboard reads precomputed results instead of retraining inline.
-- **Alerting** — when a topic's priority score crosses a threshold, auto-file a Jira ticket or post to a Slack channel (`#voice-of-customer`) with the topic, top examples, and trend chart attached, turning this from a dashboard you have to check into a system that pages you.
-- **Scale** — BERTopic + sentence-transformers comfortably handles tens of thousands of messages per batch on CPU; beyond that, move embeddings to a GPU inference service and shard clustering by time window or product area.
+- Slack/Jira integration so a topic crossing a priority threshold auto-files a ticket instead of waiting to be noticed.
+- Swap the CSV replay for a live source — Kafka, a Zendesk webhook, the Twitter or Reddit API — without touching anything downstream of `src/ingest.py`.
+- Move topic-model retraining to an async worker so the dashboard reads precomputed results instead of retraining inline.
+- Learn business-impact weights from historical churn/refund correlation instead of a static keyword list.
 
-## Tech stack
+## Stack
 
-| Layer | Library |
-|---|---|
-| Dashboard | Streamlit, Plotly |
-| Sentiment | Hugging Face Transformers (RoBERTa) -> VADER fallback |
-| Topic modeling | BERTopic (Sentence-Transformers + UMAP + HDBSCAN) -> TF-IDF + KMeans fallback |
-| Data handling | pandas, NumPy, scikit-learn |
-| Visualization | Plotly, WordCloud, Matplotlib |
+Streamlit + Plotly for the dashboard · Hugging Face Transformers (RoBERTa) with a VADER fallback for sentiment · BERTopic (Sentence-Transformers + UMAP + HDBSCAN) with a TF-IDF/KMeans fallback for topics · pandas/scikit-learn underneath.
 
 ## License
 
-No license file is included yet — add one (MIT is a reasonable default for a portfolio project) if you intend for others to reuse this code.
+Not yet licensed — add one (MIT is a reasonable default) if you want others to reuse this.

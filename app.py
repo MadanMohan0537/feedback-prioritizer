@@ -102,6 +102,32 @@ def retrain_topics():
 st.sidebar.title("📊 Feedback Analyzer")
 st.sidebar.caption("Real-time topic modeling, sentiment & prioritization")
 
+with st.sidebar.expander("📤 Use your own data"):
+    st.caption("CSV needs a `text` column at minimum; `timestamp` and `source` are used if present.")
+    uploaded = st.file_uploader("Upload feedback CSV", type="csv", label_visibility="collapsed")
+    if uploaded is not None and st.button("Load this file", use_container_width=True):
+        try:
+            df_up = pd.read_csv(uploaded)
+            if "text" not in df_up.columns:
+                st.error("CSV must have a `text` column.")
+            else:
+                if "timestamp" not in df_up.columns:
+                    df_up["timestamp"] = pd.date_range(end=pd.Timestamp.now(), periods=len(df_up), freq="min").astype(str)
+                if "source" not in df_up.columns:
+                    df_up["source"] = "uploaded"
+                rows = df_up.astype(str).to_dict("records")
+                rows.sort(key=lambda r: r["timestamp"])
+                st.session_state.all_rows = rows
+                st.session_state.cursor = 0
+                st.session_state.history = []
+                st.session_state.topic_info = {}
+                st.session_state.priorities = []
+                st.session_state.since_retrain = 0
+                st.session_state.playing = False
+                st.success(f"Loaded {len(rows)} rows — click Play or Step below.")
+        except Exception as e:
+            st.error(f"Couldn't read that CSV: {e}")
+
 batch_size = st.sidebar.slider("Messages per tick", 1, 20, 5)
 refresh_ms = st.sidebar.slider("Auto-play interval (ms)", 500, 5000, 1500, step=250)
 
@@ -199,6 +225,9 @@ with tab_priority:
         st.warning(f"Need at least {config.MIN_MESSAGES_TO_MODEL} messages before topics are modeled. Keep streaming.")
     else:
         issues, requests = split_issues_and_requests(st.session_state.priorities)
+
+        min_score = st.slider("Minimum priority score to display", 0, 100, 0, key="min_score_filter")
+        issues = [i for i in issues if i["priority_score"] >= min_score]
 
         st.subheader("Top Issues (by priority score)")
         if issues:

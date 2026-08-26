@@ -248,12 +248,13 @@ with tab_feed:
         color = {"positive": "#d4f7d4", "negative": "#f7d4d4", "neutral": "#eeeeee"}.get(val, "")
         return f"background-color: {color}"
 
-    style_fn = getattr(feed_df.style, "map", None) or feed_df.style.applymap
-    st.dataframe(
-        style_fn(color_sentiment, subset=["Sentiment"]),
-        use_container_width=True,
-        height=600,
-    )
+    # Styler needs jinja2 and can break across pandas versions — fall back cleanly.
+    try:
+        style_fn = getattr(feed_df.style, "map", None) or feed_df.style.applymap
+        styled = style_fn(color_sentiment, subset=["Sentiment"])
+        st.dataframe(styled, use_container_width=True, height=600)
+    except Exception:
+        st.dataframe(feed_df, use_container_width=True, height=600)
 
 # ---------------------------------------------------------------------------
 # Tab: Trends

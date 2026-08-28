@@ -3,6 +3,7 @@
 Turn a pile of scattered customer feedback into a ranked, defensible "fix this first" list — automatically.
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
+[![CI](https://github.com/MadanMohan0537/feedback-prioritizer/actions/workflows/ci.yml/badge.svg)](https://github.com/MadanMohan0537/feedback-prioritizer/actions/workflows/ci.yml)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -55,8 +56,14 @@ python -m venv .venv
 source .venv/bin/activate        # macOS / Linux
 .venv\Scripts\activate           # Windows
 
-pip install -r requirements.txt
+pip install -r requirements.txt      # lightweight, fully functional fallback stack
 streamlit run app.py
+```
+
+For transformer sentiment and BERTopic, install the optional model stack instead:
+
+```bash
+pip install -r requirements-full.txt
 ```
 
 Open the local URL Streamlit prints, hit **Play** in the sidebar, and watch the priority list build itself.
@@ -69,6 +76,12 @@ Open the local URL Streamlit prints, hit **Play** in the sidebar, and watch the 
 
 ```bash
 python tests/smoke_test.py
+```
+
+**Unit tests** (exercise scoring bounds, explanations, validation, and keyword matching):
+
+```bash
+python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
 ---
@@ -87,7 +100,7 @@ priority_score = 100 × ( w_freq   × frequency_norm
 | `negativity_norm` | 0.35 | How negative the topic reads on average — more negative scores higher |
 | `impact_norm` | 0.25 | Business-impact keyword signal (`crash`/`billing`/`security` → 1.0 · `slow`/`bug` → 0.6 · `ui`/`design` → 0.3) |
 
-All three weights are live sliders in the dashboard, not hardcoded — drag "business impact" up during a launch week and the ranked list re-sorts instantly, no retrain needed. Defaults live in `src/config.py`.
+All three weights are live sliders in the dashboard, not hardcoded — drag "business impact" up during a launch week and the ranked list re-sorts instantly, no retrain needed. The engine normalizes slider values to sum to one, so the score always remains within 0–100. Each issue also shows the point contribution from frequency, negativity, and impact, making the rank explainable. Defaults live in `src/config.py`.
 
 **Feature requests are ranked separately.** A topic is classified as a feature-request cluster when ≥40% of its messages match request phrases ("I wish", "please add", "would be nice", …). These rank by frequency, not negativity.
 
@@ -99,6 +112,7 @@ All three weights are live sliders in the dashboard, not hardcoded — drag "bus
 feedback-prioritizer/
 ├── app.py                        # Streamlit dashboard — entry point
 ├── requirements.txt              # Python dependencies
+├── requirements-full.txt         # Optional transformer + BERTopic stack
 ├── src/
 │   ├── config.py                 # Every tuneable in one place
 │   ├── ingest.py                 # Stream simulation + batch pull

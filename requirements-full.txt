@@ -1,0 +1,10 @@
+-r requirements.txt
+
+# Optional model stack. The application automatically uses these backends
+# when installed and falls back to VADER + TF-IDF/KMeans otherwise.
+torch>=2.0
+transformers>=4.35
+sentence-transformers>=2.2
+bertopic>=0.16
+umap-learn>=0.5
+hdbscan>=0.8

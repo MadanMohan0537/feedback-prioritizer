@@ -251,6 +251,13 @@ with tab_priority:
                 with st.expander(f"🔴 {i['label']}  —  score {i['priority_score']}  ·  {i['count']} mentions  ·  {i['pct_negative']}% negative"):
                     st.write(f"**Keywords:** {', '.join(i['keywords']) if i['keywords'] else '—'}")
                     st.write(f"**Avg business impact:** {i['avg_impact']}  |  **Avg polarity:** {i['avg_polarity']}")
+                    contributions = i["score_contributions"]
+                    st.caption(
+                        "Score contribution — "
+                        f"frequency {contributions['frequency']:.1f} + "
+                        f"negativity {contributions['sentiment']:.1f} + "
+                        f"impact {contributions['impact']:.1f}"
+                    )
                     st.write("**Example feedback:**")
                     for ex in i["examples"]:
                         st.markdown(f"> {ex['text']}  \n*({ex['source']}, polarity {ex['polarity']:+.2f})*")

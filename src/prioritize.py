@@ -27,6 +27,7 @@ fine -- a feature request isn't a complaint) rather than negativity.
 """
 
 from collections import defaultdict
+import re
 
 from . import config
 
@@ -35,7 +36,7 @@ def business_impact_score(text: str) -> float:
     text_l = text.lower()
     for weight in (1.0, 0.6, 0.3):
         for kw in config.BUSINESS_IMPACT_KEYWORDS[weight]:
-            if kw in text_l:
+            if re.search(rf"(?<!\w){re.escape(kw)}(?!\w)", text_l):
                 return weight
     return config.DEFAULT_IMPACT_SCORE
 
@@ -54,6 +55,24 @@ def _minmax_norm(values):
     return {k: (v - lo) / (hi - lo) for k, v in values.items()}
 
 
+def _normalize_weights(weights):
+    """Return non-negative weights that sum to one."""
+    required = ("frequency", "sentiment", "impact")
+    normalized = {}
+    for key in required:
+        try:
+            value = float(weights.get(key, 0))
+        except (TypeError, ValueError):
+            raise ValueError(f"Priority weight '{key}' must be numeric.") from None
+        if value < 0:
+            raise ValueError(f"Priority weight '{key}' cannot be negative.")
+        normalized[key] = value
+    total = sum(normalized.values())
+    if total <= 0:
+        raise ValueError("At least one priority weight must be greater than zero.")
+    return {key: value / total for key, value in normalized.items()}
+
+
 def compute_priorities(enriched_items, topic_info, weights=None):
     """
     enriched_items: list of dicts, each with at least:
@@ -66,7 +85,7 @@ def compute_priorities(enriched_items, topic_info, weights=None):
     examples (up to 3 representative messages), is_feature_request (bool,
     majority vote).
     """
-    weights = weights or config.PRIORITY_WEIGHTS
+    weights = _normalize_weights(weights or config.PRIORITY_WEIGHTS)
     by_topic = defaultdict(list)
     for item in enriched_items:
         by_topic[item["topic_id"]].append(item)
@@ -91,11 +110,16 @@ def compute_priorities(enriched_items, topic_info, weights=None):
         if tid in (-1, -99):
             continue
         negativity_norm = (1 - polarity_raw[tid]) / 2  # polarity -1..1 -> negativity 1..0
-        score = 100 * (
-            weights["frequency"] * freq_norm.get(tid, 0)
-            + weights["sentiment"] * negativity_norm
-            + weights["impact"] * impact_norm.get(tid, 0)
-        )
+        components = {
+            "frequency": freq_norm.get(tid, 0),
+            "sentiment": negativity_norm,
+            "impact": impact_norm.get(tid, 0),
+        }
+        contributions = {
+            key: 100 * weights[key] * components[key]
+            for key in components
+        }
+        score = sum(contributions.values())
         pct_negative = sum(1 for it in items if it["polarity"] < -0.05) / len(items) * 100
         info = topic_info.get(tid, {"label": f"Topic {tid}", "keywords": [], "size": len(items)})
 
@@ -112,6 +136,9 @@ def compute_priorities(enriched_items, topic_info, weights=None):
             "pct_feature_request": round(fr_fraction[tid] * 100, 1),
             "is_feature_request": fr_fraction[tid] >= 0.4,
             "priority_score": round(score, 1),
+            "score_components": {key: round(value, 3) for key, value in components.items()},
+            "score_contributions": {key: round(value, 1) for key, value in contributions.items()},
+            "normalized_weights": {key: round(value, 3) for key, value in weights.items()},
             "examples": [{"text": it["text"], "polarity": it["polarity"],
                           "source": it.get("source"), "timestamp": it.get("timestamp")}
                          for it in examples],

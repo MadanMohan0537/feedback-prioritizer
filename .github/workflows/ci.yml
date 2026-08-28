@@ -35,3 +35,6 @@ jobs:
 
       - name: Run pipeline smoke test
         run: python tests/smoke_test.py
+
+      - name: Run quality evaluation
+        run: python scripts/evaluate.py

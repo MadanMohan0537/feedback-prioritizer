@@ -21,8 +21,11 @@ def load_feedback_rows(csv_path=None):
     rows = []
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.DictReader(f)
+        if not reader.fieldnames or "text" not in reader.fieldnames:
+            raise ValueError("Feedback CSV must contain a 'text' column.")
         for row in reader:
-            rows.append(row)
+            if str(row.get("text", "")).strip():
+                rows.append(row)
     rows.sort(key=lambda r: r["timestamp"])
     return rows
 
@@ -58,6 +61,7 @@ def stream_feedback(csv_path=None, delay_seconds=None, loop=False, start_index=0
                 return
         row = rows[idx]
         item = {
+            **row,
             "id": idx,
             "timestamp": row["timestamp"],
             "text": row["text"],
@@ -82,6 +86,7 @@ def get_batch(rows, start_index, batch_size):
     for idx in range(start_index, end_index):
         row = rows[idx]
         batch.append({
+            **row,
             "id": idx,
             "timestamp": row["timestamp"],
             "text": row["text"],

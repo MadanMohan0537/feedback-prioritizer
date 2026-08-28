@@ -1,5 +1,15 @@
 # Changelog
 
+## v2.0
+- Add customer metadata, ARR, tier, churn-risk, and product-area ingestion.
+- Add emerging-topic velocity and customer-value factors to explainable ranking.
+- Add aspect-level opinion-unit splitting with parent-message provenance.
+- Add persistent topic names, owners, statuses, merge mappings, and release tracking.
+- Add opt-in GitHub, Slack, Zendesk, Intercom, and app-review JSON connectors.
+- Add post-release sentiment-delta and affected-account tracking.
+- Add repeatable clustering, sentiment-proxy, and ranking evaluation metrics.
+- Expand the dashboard, tests, CI, environment template, and documentation.
+
 ## v1.2
 - Normalize user-selected prioritization weights so scores remain bounded from 0–100.
 - Show each factor's point contribution for explainable rankings.

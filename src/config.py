@@ -48,10 +48,27 @@ N_FALLBACK_TOPICS = 8         # number of clusters for the TF-IDF/KMeans fallbac
 # All components are normalized to [0, 1] before combining so the weights
 # are directly interpretable as "how much this factor matters."
 PRIORITY_WEIGHTS = {
-    "frequency": 0.40,
-    "sentiment": 0.35,
-    "impact": 0.25,
+    "frequency": 0.28,
+    "sentiment": 0.24,
+    "impact": 0.20,
+    "trend": 0.16,
+    "customer_value": 0.12,
 }
+
+CUSTOMER_TIER_VALUES = {
+    "enterprise": 1.0,
+    "business": 0.75,
+    "pro": 0.55,
+    "paid": 0.45,
+    "free": 0.15,
+    "unknown": 0.25,
+}
+
+MAX_CONNECTOR_ITEMS = 5_000
+TOPIC_REGISTRY_PATH = os.getenv(
+    "FEEDBACK_TOPIC_REGISTRY",
+    os.path.join(BASE_DIR, ".feedback-prioritizer", "topic_registry.json"),
+)
 
 # Keywords that signal high business impact when present in feedback text.
 # Score 1.0 = severe (outages, billing, data loss), 0.6 = moderate, 0.3 = minor.

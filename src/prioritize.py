@@ -2,7 +2,7 @@
 Prioritization engine: turns (topic, sentiment, business-impact keywords)
 into a single ranked list a PM can act on.
 
-Priority Score (0..100) combines three normalized factors:
+Priority Score (0..100) combines five normalized factors:
 
   frequency_norm   = topic count in the rolling window, min-max normalized
                       across topics currently in view
@@ -13,8 +13,12 @@ Priority Score (0..100) combines three normalized factors:
   impact_norm      = average business-impact weight of messages in the
                       topic, from keyword matches (0.3 / 0.6 / 1.0) or the
                       default neutral weight
+  trend_norm       = whether the topic is accelerating in the recent half
+                      of the current analysis window
+  customer_value   = ARR, customer tier, and explicit churn risk for the
+                      accounts represented in the topic
 
-  score = 100 * (w_freq * frequency_norm + w_sent * negativity_norm + w_impact * impact_norm)
+The configured weights are normalized to sum to one before scoring.
 
 Weights are configurable in config.PRIORITY_WEIGHTS so a PM can re-tune
 "what matters" (e.g. weight impact higher during a launch week) without
@@ -27,6 +31,7 @@ fine -- a feature request isn't a complaint) rather than negativity.
 """
 
 from collections import defaultdict
+from datetime import datetime, timezone
 import re
 
 from . import config
@@ -57,7 +62,7 @@ def _minmax_norm(values):
 
 def _normalize_weights(weights):
     """Return non-negative weights that sum to one."""
-    required = ("frequency", "sentiment", "impact")
+    required = ("frequency", "sentiment", "impact", "trend", "customer_value")
     normalized = {}
     for key in required:
         try:
@@ -71,6 +76,56 @@ def _normalize_weights(weights):
     if total <= 0:
         raise ValueError("At least one priority weight must be greater than zero.")
     return {key: value / total for key, value in normalized.items()}
+
+
+def _parse_timestamp(value):
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return parsed
+    except (TypeError, ValueError):
+        return None
+
+
+def _topic_trend(items, midpoint):
+    """Compare recent topic mentions with the preceding half-window."""
+    timestamps = [_parse_timestamp(item.get("timestamp")) for item in items]
+    timestamps = [value for value in timestamps if value is not None]
+    if not timestamps or midpoint is None:
+        return 0.5
+    recent = sum(value >= midpoint for value in timestamps)
+    previous = len(timestamps) - recent
+    # Smoothed ratio: 0.5 is flat, values near 1 are emerging.
+    return (recent + 1) / (recent + previous + 2)
+
+
+def _arr_value(item):
+    try:
+        return max(0.0, float(item.get("arr") or 0))
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _customer_value(item):
+    arr = _arr_value(item)
+    arr_signal = min(1.0, arr / 100_000)
+    tier = str(item.get("customer_tier") or "unknown").strip().lower()
+    tier_signal = config.CUSTOMER_TIER_VALUES.get(tier, config.CUSTOMER_TIER_VALUES["unknown"])
+    churn_signal = 1.0 if str(item.get("churn_risk", "")).lower() in {"1", "true", "high", "yes"} else 0.0
+    return max(arr_signal, tier_signal, churn_signal)
+
+
+def _affected_arr(items):
+    """Count each known account once, using its largest observed ARR value."""
+    by_account = {}
+    for item in items:
+        account_id = str(item.get("account_id") or "").strip()
+        if account_id:
+            by_account[account_id] = max(by_account.get(account_id, 0.0), _arr_value(item))
+    return sum(by_account.values())
 
 
 def compute_priorities(enriched_items, topic_info, weights=None):
@@ -90,8 +145,14 @@ def compute_priorities(enriched_items, topic_info, weights=None):
     for item in enriched_items:
         by_topic[item["topic_id"]].append(item)
 
-    freq_raw, impact_raw, polarity_raw = {}, {}, {}
+    freq_raw, impact_raw, polarity_raw, trend_raw, customer_value_raw = {}, {}, {}, {}, {}
     fr_fraction = {}
+
+    parsed_times = sorted(
+        value for value in (_parse_timestamp(item.get("timestamp")) for item in enriched_items)
+        if value is not None
+    )
+    midpoint = parsed_times[len(parsed_times) // 2] if parsed_times else None
 
     for tid, items in by_topic.items():
         if tid in (-1, -99):
@@ -100,10 +161,14 @@ def compute_priorities(enriched_items, topic_info, weights=None):
         impacts = [business_impact_score(it["text"]) for it in items]
         impact_raw[tid] = sum(impacts) / len(impacts)
         polarity_raw[tid] = sum(it["polarity"] for it in items) / len(items)
+        trend_raw[tid] = _topic_trend(items, midpoint)
+        customer_value_raw[tid] = sum(_customer_value(it) for it in items) / len(items)
         fr_fraction[tid] = sum(1 for it in items if is_feature_request(it["text"])) / len(items)
 
     freq_norm = _minmax_norm(freq_raw)
     impact_norm = _minmax_norm(impact_raw)
+    trend_norm = _minmax_norm(trend_raw)
+    customer_value_norm = _minmax_norm(customer_value_raw)
 
     results = []
     for tid, items in by_topic.items():
@@ -114,6 +179,8 @@ def compute_priorities(enriched_items, topic_info, weights=None):
             "frequency": freq_norm.get(tid, 0),
             "sentiment": negativity_norm,
             "impact": impact_norm.get(tid, 0),
+            "trend": trend_norm.get(tid, 0),
+            "customer_value": customer_value_norm.get(tid, 0),
         }
         contributions = {
             key: 100 * weights[key] * components[key]
@@ -132,6 +199,10 @@ def compute_priorities(enriched_items, topic_info, weights=None):
             "count": len(items),
             "avg_polarity": round(polarity_raw[tid], 3),
             "avg_impact": round(impact_raw[tid], 3),
+            "trend_score": round(trend_raw[tid], 3),
+            "avg_customer_value": round(customer_value_raw[tid], 3),
+            "affected_accounts": len({it.get("account_id") for it in items if it.get("account_id")}),
+            "affected_arr": round(_affected_arr(items), 2),
             "pct_negative": round(pct_negative, 1),
             "pct_feature_request": round(fr_fraction[tid] * 100, 1),
             "is_feature_request": fr_fraction[tid] >= 0.4,

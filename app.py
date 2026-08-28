@@ -28,6 +28,10 @@ from src.ingest import load_feedback_rows, get_batch
 from src.sentiment import get_analyzer
 from src.topic_model import build_topic_model
 from src.prioritize import compute_priorities, split_issues_and_requests, business_impact_score
+from src.opinion_units import expand_feedback_item
+from src.governance import TopicRegistry
+from src.outcomes import OutcomeTracker
+from src.connectors import configured_connectors, fetch_connector
 
 try:
     from streamlit_autorefresh import st_autorefresh
@@ -65,16 +69,27 @@ def get_sentiment_analyzer():
     return get_analyzer()
 
 
+@st.cache_resource(show_spinner=False)
+def get_topic_registry():
+    return TopicRegistry()
+
+
+@st.cache_resource(show_spinner=False)
+def get_outcome_tracker():
+    return OutcomeTracker()
+
+
 def process_batch(batch):
     analyzer = get_sentiment_analyzer()
     for item in batch:
-        result = analyzer.analyze(item["text"])
-        item["polarity"] = result.polarity
-        item["sentiment_label"] = result.label
-        item["sentiment_score"] = result.score
-        item["impact"] = business_impact_score(item["text"])
-        item["topic_id"] = -99  # unassigned until next retrain
-        st.session_state.history.append(item)
+        for unit in expand_feedback_item(item):
+            result = analyzer.analyze(unit["text"])
+            unit["polarity"] = result.polarity
+            unit["sentiment_label"] = result.label
+            unit["sentiment_score"] = result.score
+            unit["impact"] = business_impact_score(unit["text"])
+            unit["topic_id"] = -99  # unassigned until next retrain
+            st.session_state.history.append(unit)
     st.session_state.sentiment_backend = analyzer._backend
 
 
@@ -89,9 +104,9 @@ def retrain_topics():
 
     for it, tid in zip(window, topic_ids):
         it["topic_id"] = int(tid)
-    st.session_state.topic_info = topic_info
+    st.session_state.topic_info = get_topic_registry().apply(topic_info)
 
-    priorities = compute_priorities(window, topic_info)
+    priorities = compute_priorities(window, st.session_state.topic_info)
     st.session_state.priorities = priorities
     st.session_state.since_retrain = 0
 
@@ -103,7 +118,7 @@ st.sidebar.title("📊 Feedback Analyzer")
 st.sidebar.caption("Real-time topic modeling, sentiment & prioritization")
 
 with st.sidebar.expander("📤 Use your own data"):
-    st.caption("CSV needs a `text` column at minimum; `timestamp` and `source` are used if present.")
+    st.caption("CSV needs `text`; optional account_id, customer_tier, arr, churn_risk, and product_area enrich prioritization.")
     uploaded = st.file_uploader("Upload feedback CSV", type="csv", label_visibility="collapsed")
     if uploaded is not None and st.button("Load this file", use_container_width=True):
         try:
@@ -127,6 +142,25 @@ with st.sidebar.expander("📤 Use your own data"):
                 st.success(f"Loaded {len(rows)} rows — click Play or Step below.")
         except Exception as e:
             st.error(f"Couldn't read that CSV: {e}")
+
+connectors = configured_connectors()
+with st.sidebar.expander("🔌 Connected sources"):
+    if not connectors:
+        st.caption("No connector endpoints configured. See `.env.example` for GitHub, Slack, Zendesk, Intercom, and app-review settings.")
+    for connector in connectors:
+        if st.button(f"Import {connector.name.title()}", key=f"connector-{connector.name}", use_container_width=True):
+            try:
+                rows = fetch_connector(connector)
+                st.session_state.all_rows = sorted(rows, key=lambda row: row["timestamp"])
+                st.session_state.cursor = 0
+                st.session_state.history = []
+                st.session_state.topic_info = {}
+                st.session_state.priorities = []
+                st.session_state.since_retrain = 0
+                st.session_state.playing = False
+                st.success(f"Imported {len(rows)} items from {connector.name}.")
+            except Exception as exc:
+                st.error(f"{connector.name.title()} import failed: {exc}")
 
 batch_size = st.sidebar.slider("Messages per tick", 1, 20, 5)
 refresh_ms = st.sidebar.slider("Auto-play interval (ms)", 500, 5000, 1500, step=250)
@@ -159,7 +193,15 @@ with st.sidebar.expander("Prioritization weights"):
     w_freq = st.slider("Frequency weight", 0.0, 1.0, config.PRIORITY_WEIGHTS["frequency"])
     w_sent = st.slider("Sentiment weight", 0.0, 1.0, config.PRIORITY_WEIGHTS["sentiment"])
     w_imp = st.slider("Business impact weight", 0.0, 1.0, config.PRIORITY_WEIGHTS["impact"])
-    live_weights = {"frequency": w_freq, "sentiment": w_sent, "impact": w_imp}
+    w_trend = st.slider("Emerging trend weight", 0.0, 1.0, config.PRIORITY_WEIGHTS["trend"])
+    w_value = st.slider("Customer value weight", 0.0, 1.0, config.PRIORITY_WEIGHTS["customer_value"])
+    live_weights = {
+        "frequency": w_freq,
+        "sentiment": w_sent,
+        "impact": w_imp,
+        "trend": w_trend,
+        "customer_value": w_value,
+    }
 
 if st.session_state.model_backend:
     st.sidebar.info(f"Topic model: **{st.session_state.model_backend}**")
@@ -238,6 +280,8 @@ with tab_priority:
                 "% Negative": i["pct_negative"],
                 "Avg Impact": i["avg_impact"],
                 "Avg Polarity": i["avg_polarity"],
+                "Trend": i["trend_score"],
+                "Affected ARR": i["affected_arr"],
             } for i in issues])
             fig = px.bar(
                 df_issues.head(10)[::-1], x="Priority", y="Topic", orientation="h",
@@ -256,11 +300,54 @@ with tab_priority:
                         "Score contribution — "
                         f"frequency {contributions['frequency']:.1f} + "
                         f"negativity {contributions['sentiment']:.1f} + "
-                        f"impact {contributions['impact']:.1f}"
+                        f"impact {contributions['impact']:.1f} + "
+                        f"trend {contributions['trend']:.1f} + "
+                        f"customer value {contributions['customer_value']:.1f}"
                     )
+                    st.write(
+                        f"**Affected accounts:** {i['affected_accounts']}  |  "
+                        f"**Affected ARR:** ${i['affected_arr']:,.0f}  |  "
+                        f"**Owner:** {st.session_state.topic_info.get(i['topic_id'], {}).get('owner', 'Unassigned')}  |  "
+                        f"**Status:** {st.session_state.topic_info.get(i['topic_id'], {}).get('status', 'new')}"
+                    )
+                    topic_meta = st.session_state.topic_info.get(i["topic_id"], {})
+                    stable_key = topic_meta.get("stable_key")
+                    if stable_key:
+                        outcome = get_outcome_tracker().evaluate(stable_key, i["avg_polarity"])
+                        if outcome:
+                            direction = "improved" if outcome["improved"] else "declined"
+                            st.info(f"Post-release sentiment {direction} by {outcome['sentiment_delta']:+.2f}.")
                     st.write("**Example feedback:**")
                     for ex in i["examples"]:
                         st.markdown(f"> {ex['text']}  \n*({ex['source']}, polarity {ex['polarity']:+.2f})*")
+                    if stable_key:
+                        with st.form(f"govern-{stable_key}"):
+                            new_label = st.text_input("Topic name", value=i["label"])
+                            new_owner = st.text_input("Owner", value=topic_meta.get("owner", "Unassigned"))
+                            statuses = ["new", "reviewing", "planned", "in_progress", "released", "dismissed"]
+                            current_status = topic_meta.get("status", "new")
+                            status_index = statuses.index(current_status) if current_status in statuses else 0
+                            new_status = st.selectbox("Status", statuses, index=status_index)
+                            save_governance = st.form_submit_button("Save topic controls")
+                        if save_governance:
+                            get_topic_registry().update(
+                                stable_key, label=new_label, owner=new_owner, status=new_status
+                            )
+                            st.session_state.topic_info[i["topic_id"]].update(
+                                {"label": new_label, "owner": new_owner, "status": new_status}
+                            )
+                            for priority in st.session_state.priorities:
+                                if priority["topic_id"] == i["topic_id"]:
+                                    priority["label"] = new_label
+                            if new_status == "released":
+                                accounts = {
+                                    row.get("account_id") for row in window
+                                    if row.get("topic_id") == i["topic_id"] and row.get("account_id")
+                                }
+                                get_outcome_tracker().mark_released(
+                                    stable_key, i["avg_polarity"], accounts, "Marked released in dashboard"
+                                )
+                            st.rerun()
         else:
             st.info("No issue clusters yet.")
 

@@ -24,8 +24,22 @@ Edge cases considered (documented here and in the README):
 """
 
 from functools import lru_cache
+import re
 
 from . import config
+
+
+POSITIVE_WORDS = {
+    "amazing", "best", "easy", "excellent", "fast", "fixed", "flawless",
+    "great", "helpful", "improved", "love", "nice", "reliable", "smooth",
+}
+NEGATIVE_WORDS = {
+    "broken", "confusing", "crash", "crashed", "crashing", "difficult",
+    "disappointed", "error", "failed", "freezes", "freezing", "frustrating",
+    "lag", "laggy", "lost", "outage", "overcharged", "slow", "unresponsive",
+    "unusable", "waiting", "worried",
+}
+WORD_RE = re.compile(r"[a-z']+")
 
 
 class SentimentResult:
@@ -76,9 +90,12 @@ class SentimentAnalyzer:
             except Exception:
                 pass
         # Fallback
-        from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-        self._vader = SentimentIntensityAnalyzer()
-        self._backend = "vader"
+        try:
+            from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+            self._vader = SentimentIntensityAnalyzer()
+            self._backend = "vader"
+        except ImportError:
+            self._backend = "builtin_lexicon"
 
     def analyze(self, text: str) -> SentimentResult:
         self._init_backend()
@@ -88,6 +105,8 @@ class SentimentAnalyzer:
 
         if self._backend == "transformer":
             return self._analyze_transformer(text)
+        if self._backend == "builtin_lexicon":
+            return self._analyze_builtin(text)
         return self._analyze_vader(text)
 
     def _analyze_transformer(self, text: str) -> SentimentResult:
@@ -103,10 +122,13 @@ class SentimentAnalyzer:
             return SentimentResult(label, best["score"], polarity, "transformer")
         except Exception:
             # runtime failure (e.g. OOM) -- degrade to VADER for this call
-            from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
-            if self._vader is None:
-                self._vader = SentimentIntensityAnalyzer()
-            return self._analyze_vader(text)
+            try:
+                from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+                if self._vader is None:
+                    self._vader = SentimentIntensityAnalyzer()
+                return self._analyze_vader(text)
+            except ImportError:
+                return self._analyze_builtin(text)
 
     def _analyze_vader(self, text: str) -> SentimentResult:
         scores = self._vader.polarity_scores(text)
@@ -118,6 +140,18 @@ class SentimentAnalyzer:
         else:
             label = "neutral"
         return SentimentResult(label, abs(compound), compound, "vader")
+
+    def _analyze_builtin(self, text: str) -> SentimentResult:
+        words = WORD_RE.findall(text.lower())
+        score = 0
+        for index, word in enumerate(words):
+            value = 1 if word in POSITIVE_WORDS else -1 if word in NEGATIVE_WORDS else 0
+            if value and index and words[index - 1] in {"not", "never", "isn't", "wasn't"}:
+                value *= -1
+            score += value
+        polarity = max(-1.0, min(1.0, score / max(1, len(words) ** 0.5)))
+        label = "positive" if polarity > 0.05 else "negative" if polarity < -0.05 else "neutral"
+        return SentimentResult(label, abs(polarity), polarity, "builtin_lexicon")
 
     def analyze_batch(self, texts):
         return [self.analyze(t) for t in texts]

@@ -24,7 +24,7 @@ import streamlit as st
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src import config
-from src.ingest import load_feedback_rows, get_batch
+from src.ingest import load_feedback_rows, load_collected_rows, get_batch
 from src.sentiment import get_analyzer
 from src.topic_model import build_topic_model
 from src.prioritize import compute_priorities, split_issues_and_requests, business_impact_score
@@ -142,6 +142,19 @@ with st.sidebar.expander("📤 Use your own data"):
                 st.success(f"Loaded {len(rows)} rows — click Play or Step below.")
         except Exception as e:
             st.error(f"Couldn't read that CSV: {e}")
+
+    collector_rows = load_collected_rows(os.getenv("PULSE_DATABASE", "data/pulse.db"))
+    if collector_rows and st.button(
+        f"Load {len(collector_rows)} collected records", use_container_width=True
+    ):
+        st.session_state.all_rows = collector_rows
+        st.session_state.cursor = 0
+        st.session_state.history = []
+        st.session_state.topic_info = {}
+        st.session_state.priorities = []
+        st.session_state.since_retrain = 0
+        st.session_state.playing = False
+        st.success("Loaded the normalized feedback store.")
 
 connectors = configured_connectors()
 with st.sidebar.expander("🔌 Connected sources"):

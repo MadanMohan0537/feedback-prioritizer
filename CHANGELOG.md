@@ -26,3 +26,13 @@
 
 ## v1.0
 - Initial pipeline: simulated streaming ingestion, transformer sentiment with VADER fallback, BERTopic topic modeling with TF-IDF/KMeans fallback, weighted prioritization engine, four-tab Streamlit dashboard.
+# Unreleased — Pulse Collector
+
+- Added the versioned `FeedbackEntry` canonical schema.
+- Added SQLite storage for normalized feedback, raw events, checkpoints, and dead letters.
+- Added privacy redaction and deterministic pseudonymous user identifiers.
+- Added idempotent collection orchestration and machine-readable quality reports.
+- Added CSV/JSONL, synthetic, generic JSON, Typeform, and Zendesk connectors.
+- Added `pulse.py` CLI for initialization, collection, statistics, export, and deletion.
+- Connected the Streamlit dashboard to locally collected records.
+- Added collector tests, `.env.example`, and end-to-end documentation.

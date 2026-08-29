@@ -1,205 +1,287 @@
-# Feedback Prioritizer
+# Pulse — Feedback Collector & Prioritizer
 
-Turn a pile of scattered customer feedback into a ranked, defensible "fix this first" list — automatically.
+> Turn customer noise into a product compass.
 
 [![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![CI](https://github.com/MadanMohan0537/feedback-prioritizer/actions/workflows/ci.yml/badge.svg)](https://github.com/MadanMohan0537/feedback-prioritizer/actions/workflows/ci.yml)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Most feedback tools either dump raw reviews on you or bury a real signal under a generic sentiment score. This one goes further: it clusters incoming feedback into topics on its own, scores how customers feel about each one, and combines that with *how often it's mentioned* and *how much it costs the business* into a single priority number. Point it at your own CSV, or replay the bundled 650-row demo dataset to see it work end to end in under a minute.
+Pulse is an open, local-first Voice of Customer platform. It collects feedback from disconnected channels, validates and protects it, discovers recurring customer problems, and produces a transparent “work on this first” list.
 
----
+It closes the loop from **customer signal → normalized evidence → insight → priority → release outcome** without hiding decisions behind an unexplained AI score.
 
-## Table of Contents
+## Why Pulse exists
 
-- [Why this exists](#why-this-exists)
-- [What it does](#what-it-does)
-- [Quickstart](#quickstart)
-- [The prioritization formula](#the-prioritization-formula)
-- [Project layout](#project-layout)
-- [Design decisions](#design-decisions)
-- [Honest limitations](#honest-limitations)
-- [Where this goes next](#where-this-goes-next)
-- [Tech stack](#tech-stack)
-- [License](#license)
+Support tickets, reviews, surveys, communities, and sales conversations each show only part of the customer experience. Copying them into a spreadsheet does not solve the problem: records get duplicated, identities leak, source context disappears, and the loudest anecdote still wins.
 
----
+Pulse separates the problem into four layers:
 
-## Why this exists
+```mermaid
+flowchart LR
+    A["Sources"] --> B["Collector"]
+    B --> C["Analyst"]
+    C --> D["Decider"]
+    D --> E["Dashboard & outcomes"]
+```
 
-A support inbox, an app-store review feed, and a Twitter mentions column all say something true about your product, but nobody reads all three every day. By the time a pattern is obvious to a human, it's usually already costing you retention. This tool is meant to sit where a PM or support lead would otherwise be manually skimming — it reads everything, groups it, and hands back a short list worth acting on today.
+| Layer | Responsibility | Current implementation |
+|---|---|---|
+| Collector | Fetch, validate, redact, deduplicate, checkpoint, store | SQLite, JSONL, CSV, synthetic, generic JSON, Typeform, Zendesk, Intercom, Apple, Google Play |
+| Analyst | Split opinions, score sentiment, discover topics | RoBERTa/VADER and BERTopic/TF-IDF fallbacks |
+| Decider | Rank issues using explainable business factors | Tunable five-factor score |
+| Bridge | Explore evidence and measure shipped outcomes | Streamlit dashboard, governance registry, release tracking |
 
----
+## Features
 
-## What it does
+### Reliable collection
 
-1. **Ingests** feedback as a stream — either the included synthetic dataset (650 reviews for a fictional app, "TaskFlow," across 14 days) or a CSV you upload directly in the sidebar.
-2. **Scores sentiment** on each message as it arrives, using a transformer model tuned on informal text, with automatic VADER and standard-library lexicon fallbacks if models or dependencies are unavailable.
-3. **Discovers topics** on a rolling window of recent messages — no predefined category list, no manual tagging.
-4. **Prioritizes** each topic with a transparent formula that blends volume, negativity, business impact, emerging velocity, and customer value.
-5. **Separates feature requests from complaints** automatically, so "please add dark mode" doesn't get buried under bug reports just because its sentiment reads neutral.
-6. **Splits mixed messages into opinion units**, so “love the design, but sync is broken” contributes separately to design and sync topics.
-7. **Keeps people in control** with persistent topic names, owners, statuses, release tracking, and post-release sentiment measurement.
-8. **Displays it all live** on a Streamlit dashboard: a ranked issue list, a live feed, trend charts, and topic word clouds.
+- Versioned canonical feedback contract
+- Immutable raw-event capture for replay and debugging
+- Transactional SQLite normalized store
+- Source-specific incremental checkpoints
+- Idempotent `(source, external_id)` upserts
+- Cross-record content hashes
+- Email, phone, and IP-address redaction enabled by default
+- Deterministically pseudonymized user identifiers
+- Dead-letter storage for invalid records
+- JSONL export for downstream tools
+- Synthetic feedback generator for safe demos
+- CSV and JSONL bulk imports
+- Generic JSON API, Typeform, Zendesk, Intercom, Apple App Store, and Google Play adapters
+- Retry and exponential backoff for temporary API failures
 
----
+### Feedback intelligence
 
-## Quickstart
+- Aspect-level opinion splitting
+- Transformer sentiment with a VADER fallback
+- BERTopic clustering with a TF-IDF/KMeans fallback
+- Feature-request detection
+- Topic trend and affected-account analysis
+- Persistent topic names, owners, workflow status, and merges
+- Post-release sentiment comparison
 
-**Prerequisites:** Python 3.9+
+### Transparent prioritization
+
+```text
+priority = 100 × (
+    0.28 × frequency
+  + 0.24 × negativity
+  + 0.20 × business impact
+  + 0.16 × emerging trend
+  + 0.12 × customer value
+)
+```
+
+Every factor is normalized and visible. Product managers can change weights in the dashboard and see the ranking update immediately. Feature requests are separated from complaints so neutral requests are not unfairly suppressed by sentiment.
+
+## Quick start
+
+Requirements: Python 3.9 or newer.
 
 ```bash
 git clone https://github.com/MadanMohan0537/feedback-prioritizer.git
 cd feedback-prioritizer
-
-# Create and activate a virtual environment (recommended)
 python -m venv .venv
-source .venv/bin/activate        # macOS / Linux
-.venv\Scripts\activate           # Windows
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
 
-pip install -r requirements.txt      # lightweight, fully functional fallback stack
+Initialize the collector and generate 100 safe sample records:
+
+```bash
+python pulse.py init
+python pulse.py fetch --source synthetic --count 100
+python pulse.py stats
+python pulse.py export --output exports/feedback.jsonl
+```
+
+Run the dashboard:
+
+```bash
 streamlit run app.py
 ```
 
-For transformer sentiment and BERTopic, install the optional model stack instead:
+Open **Use your own data** in the sidebar and choose **Load collected records** to analyze SQLite data. You can also upload a CSV or replay the bundled 650-row dataset.
+
+## Collector commands
 
 ```bash
-pip install -r requirements-full.txt
+# Import CSV or JSONL
+python pulse.py fetch --source file --path data/my_feedback.csv
+
+# Pull a generic API whose records are in an `items` array
+PULSE_API_TOKEN=... python pulse.py fetch \
+  --source json --name community --url https://example.com/api/feedback
+
+# Typeform responses
+TYPEFORM_FORM_ID=... TYPEFORM_TOKEN=... \
+  python pulse.py fetch --source typeform
+
+# Zendesk incremental tickets
+ZENDESK_SUBDOMAIN=... ZENDESK_TOKEN=... \
+  python pulse.py fetch --source zendesk
+
+# Intercom conversations
+INTERCOM_TOKEN=... python pulse.py fetch --source intercom
+
+# App-store reviews (short-lived vendor access tokens)
+APPLE_APP_ID=... APPLE_CONNECT_TOKEN=... python pulse.py fetch --source apple
+GOOGLE_PLAY_PACKAGE=... GOOGLE_PLAY_ACCESS_TOKEN=... \
+  python pulse.py fetch --source google-play
+
+# Filter an export to one source
+python pulse.py export --source zendesk --output exports/zendesk.jsonl
+
+# Honor a deletion request using the stored hashed identifier
+python pulse.py delete-user HASHED_USER_ID
 ```
 
-Open the local URL Streamlit prints, hit **Play** in the sidebar, and watch the priority list build itself.
+Use cron, a container scheduler, or a workflow runner to invoke `pulse.py fetch`. A checkpoint advances only after the batch has been processed.
 
-**To use your own data** instead of the demo set, open the **"Use your own data"** panel in the sidebar and upload a CSV. At minimum it needs a `text` column — `timestamp` and `source` are used if present and auto-filled if not. Optional `account_id`, `customer_tier`, `arr`, `churn_risk`, and `product_area` fields add commercial context.
+## Canonical schema
 
-**No GPU required.** The full transformer + BERTopic stack is used automatically when installed and reachable; otherwise the app runs the same pipeline on lightweight fallbacks (VADER sentiment, TF-IDF/KMeans topics) with zero code changes and no loss of functionality. The active backend for each stage is always shown in the sidebar.
+Every connector returns a `FeedbackEntry`:
 
-**Smoke test** (exercises the full pipeline without launching Streamlit):
-
-```bash
-python tests/smoke_test.py
+```json
+{
+  "id": "internal-uuid",
+  "external_id": "ticket-123",
+  "source": "zendesk",
+  "source_type": "support_ticket",
+  "timestamp": "2026-08-29T12:30:00Z",
+  "ingested_at": "2026-08-29T12:31:12Z",
+  "updated_at": "2026-08-29T12:30:45Z",
+  "user_id": "pseudonymous-sha256",
+  "text": "Export freezes on large files.",
+  "language": "en",
+  "rating": null,
+  "url": "",
+  "product": "analytics",
+  "product_version": "3.4.1",
+  "metadata": {"priority": "high"},
+  "content_hash": "sha256",
+  "schema_version": "1.0"
+}
 ```
 
-**Unit tests** (exercise scoring bounds, explanations, validation, and keyword matching):
+`external_id` makes retries safe. `content_hash` detects identical text across feeds. `timestamp` records when the customer spoke; `ingested_at` records when Pulse received it.
+
+## Adding a connector
+
+Implement the protocol from `src/collector/connectors/base.py`:
+
+```python
+class MyConnector:
+    name = "my_source"
+
+    def fetch(self, checkpoint=""):
+        records = []
+        # records.append((FeedbackEntry(...), original_payload))
+        return FetchResult(records=records, next_cursor="vendor-cursor")
+```
+
+Pass it through `src.collector.pipeline.collect`. The pipeline handles redaction, user hashing, persistence, run metrics, dead letters, and checkpoint commits.
+
+## Privacy and security
+
+Customer feedback can contain personal or confidential data. Pulse therefore:
+
+- Redacts common emails, phone numbers, and IP addresses before analysis.
+- Hashes source user IDs using `PULSE_HASH_SALT`.
+- Keeps tokens in environment variables rather than code or SQLite.
+- Avoids logging raw feedback.
+- Provides deletion by pseudonymous user ID.
+- Keeps the local database and `.env` out of Git.
+
+Redaction is a safety layer, not a legal guarantee. Pseudonymized records can remain personal data. Before using production data, define a lawful purpose, retention window, access policy, and deletion process appropriate to your organization and jurisdiction.
+
+## Data-quality report
+
+Every collection run prints machine-readable metrics:
+
+```json
+{
+  "source": "synthetic",
+  "fetched": 100,
+  "accepted": 100,
+  "duplicates": 0,
+  "invalid": 0,
+  "redacted": 0,
+  "errors": 0
+}
+```
+
+## Project structure
+
+```text
+feedback-prioritizer/
+├── app.py                       # Streamlit command center
+├── pulse.py                     # Collector CLI entry point
+├── src/
+│   ├── collector/
+│   │   ├── cli.py               # init/fetch/stats/export/delete-user
+│   │   ├── models.py            # canonical FeedbackEntry
+│   │   ├── pipeline.py          # privacy → storage → checkpoint
+│   │   ├── privacy.py           # PII guard and identifier hashing
+│   │   ├── quality.py           # run-quality metrics
+│   │   ├── storage.py           # SQLite/raw/dead-letter storage
+│   │   └── connectors/          # files, synthetic, HTTP vendors
+│   ├── sentiment.py             # sentiment and fallback
+│   ├── topic_model.py           # topic discovery and fallback
+│   ├── opinion_units.py         # multi-aspect splitting
+│   ├── prioritize.py            # explainable ranking
+│   ├── governance.py            # workflow state
+│   └── outcomes.py              # post-release validation
+├── data/sample_reviews.csv
+├── scripts/evaluate.py
+└── tests/
+```
+
+## Testing and evaluation
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
-```
-
----
-
-## The prioritization formula
-
-```
-priority_score = 100 × ( w_freq   × frequency_norm
-                        + w_sent   × negativity_norm
-                        + w_impact × impact_norm
-                        + w_trend  × trend_norm
-                        + w_value  × customer_value_norm )
-```
-
-| Component | Default weight | Description |
-|---|---|---|
-| `frequency_norm` | 0.28 | How often the topic comes up, relative to everything else currently in view |
-| `negativity_norm` | 0.24 | How negative the topic reads on average — more negative scores higher |
-| `impact_norm` | 0.20 | Business-impact keyword signal (`crash`/`billing`/`security` → 1.0 · `slow`/`bug` → 0.6 · `ui`/`design` → 0.3) |
-| `trend_norm` | 0.16 | Whether mentions are accelerating in the recent half of the analysis window |
-| `customer_value_norm` | 0.12 | ARR, customer tier, and explicit churn-risk signal for affected accounts |
-
-All three weights are live sliders in the dashboard, not hardcoded — drag "business impact" up during a launch week and the ranked list re-sorts instantly, no retrain needed. The engine normalizes slider values to sum to one, so the score always remains within 0–100. Each issue also shows the point contribution from frequency, negativity, and impact, making the rank explainable. Defaults live in `src/config.py`.
-
-**Feature requests are ranked separately.** A topic is classified as a feature-request cluster when ≥40% of its messages match request phrases ("I wish", "please add", "would be nice", …). These rank by frequency, not negativity.
-
----
-
-## Project layout
-
-```
-feedback-prioritizer/
-├── app.py                        # Streamlit dashboard — entry point
-├── requirements.txt              # Python dependencies
-├── requirements-full.txt         # Optional transformer + BERTopic stack
-├── src/
-│   ├── connectors.py             # GitHub, Slack, Zendesk, Intercom, app-review adapters
-│   ├── config.py                 # Every tuneable in one place
-│   ├── evaluation.py             # Topic, sentiment-proxy, and ranking quality metrics
-│   ├── governance.py             # Persistent topic naming, ownership, status, merges
-│   ├── ingest.py                 # Stream simulation + batch pull
-│   ├── opinion_units.py          # Aspect-level feedback splitting with provenance
-│   ├── outcomes.py               # Release follow-up and sentiment-delta tracking
-│   ├── sentiment.py              # Transformer sentiment + VADER fallback
-│   ├── topic_model.py            # BERTopic + TF-IDF/KMeans fallback
-│   └── prioritize.py             # Scoring, ranking, feature-request detection
-├── data/
-│   ├── sample_reviews.csv        # 650-row synthetic dataset (TaskFlow app, 14 days)
-│   └── generate_sample_data.py   # Script that generated the demo data
-├── tests/
-│   ├── smoke_test.py             # End-to-end check without launching Streamlit
-│   └── test_*.py                 # Unit and contract tests
-├── scripts/evaluate.py           # Repeatable labeled-fixture quality report
-└── CHANGELOG.md
-```
-
----
-
-## Design decisions
-
-**Batch retraining over incremental updates.** BERTopic supports online-update patterns, but topic IDs can drift or renumber between updates in ways that are confusing on a live dashboard. Instead, the model re-fits on a rolling window every `RETRAIN_EVERY_N` new messages (default 20) — cheap at this data volume, and topic labels stay stable within a window. At production scale this moves to an async batch job.
-
-**Everything degrades gracefully.** A demo that hard-requires a GPU and Hugging Face network access just to boot is a bad demo. Every model-backed stage has a lexicon/statistical fallback so the pipeline is always runnable. The sidebar always shows which backend is active.
-
-**Human governance survives retraining.** Model-generated keyword signatures map to a local registry. PMs can rename a topic, assign an owner, move it through workflow states, and mark it released without modifying model output or committing local operating data.
-
-## Connected sources
-
-Copy `.env.example` to `.env`, configure only the approved endpoints you use, and expose those variables to the Streamlit process. The dashboard discovers configured GitHub Issues, Slack, Zendesk, Intercom, and app-review endpoints automatically. All adapters normalize records into the same schema and retain external URLs and account metadata when present.
-
-Tokens are never stored by the application. Connector state, topic governance, and outcome records stay local; `.env` and `.feedback-prioritizer/` are ignored by Git.
-
-## Quality evaluation
-
-The repository includes labeled synthetic topics and star ratings, enabling a repeatable baseline report:
-
-```bash
+python tests/smoke_test.py
 python scripts/evaluate.py
 ```
 
-The report includes Adjusted Rand Index and normalized mutual information for topic grouping, rating-proxy sentiment accuracy, score-bound checks, ranking-order checks, and explanation coverage. Synthetic evaluation is a regression signal—not a substitute for a labeled sample from the target organization.
+Collector tests cover idempotent reruns, upserts, raw persistence, imports, exports, PII handling, and deletion. Intelligence evaluation reports topic Adjusted Rand Index/NMI, sentiment-proxy accuracy, ranking bounds, ordering, and explanation coverage.
 
----
+Synthetic evaluation is a regression signal—not a substitute for a labeled, anonymized sample from the intended organization.
 
 ## Honest limitations
 
-- **Opinion-unit splitting is heuristic.** It handles sentences and contrast clauses locally, but an optional LLM extractor would improve implicit or complex multi-aspect feedback.
-- **Topic granularity** is sensitive to cluster-size parameters; too coarse merges distinct issues, too fine fragments one issue into near-duplicate clusters. Worth a periodic human pass on topic labels, especially after a product change shifts what customers write about.
-- **Business-impact weights are hand-curated.** Customer metadata and post-release outcome tracking are available, but learned weights still require sufficient organization-specific history.
-- **Synthetic demo data.** `sample_reviews.csv` is generated — not scraped — to avoid licensing/ToS issues in a public repo. Swapping in real data only requires matching the `text` / `timestamp` / `source` schema.
+- Typeform and Zendesk are initial REST adapters; full multi-tenant OAuth belongs in a service deployment.
+- Lightweight PII detection cannot detect every sensitive phrase.
+- Exact hashing detects identical text, not semantic similarity; embedding-based near-duplicate grouping is planned.
+- Opinion splitting and feature-request detection include heuristic fallbacks.
+- Topic granularity depends on dataset size and clustering parameters.
+- Impact keywords and default weights should be calibrated using organization-specific outcomes.
+- SQLite targets a single-node deployment. Multi-worker production deployments should use a managed database and job queue.
 
----
+## Roadmap
 
-## Where this goes next
+- Typeform webhooks and complete multi-page vendor backfills
+- Reddit/community connectors with policy-aware retention
+- Connector health checks and dead-letter replay
+- Semantic near-duplicate grouping with provenance
+- Language detection and multilingual embeddings
+- Jira/GitHub issue creation with human approval
+- Slack and email reports
+- Background topic-model jobs
+- Learned impact weights from churn, refunds, and adoption
+- Automatic post-release “resolved” detection
 
-- **Alerting and write-back** — when a topic crosses a threshold, create a reviewed Jira/GitHub issue or post to an approved Slack channel.
-- **Production OAuth and pagination** — the included connectors accept approved JSON endpoints and bearer tokens; multi-tenant OAuth, incremental cursors, retries, and rate-limit coordination belong in a service layer.
-- **Async retraining** — move topic-model retraining to a background worker so the dashboard reads precomputed results instead of retraining inline.
-- **Learned impact weights** — replace the keyword list with weights trained from historical churn/refund correlation.
+## Product principles
 
----
-
-## Tech stack
-
-| Layer | Library |
-|---|---|
-| Dashboard | [Streamlit](https://streamlit.io/), [Plotly](https://plotly.com/) |
-| Sentiment | Hugging Face Transformers (`cardiffnlp/twitter-roberta-base-sentiment-latest`) → VADER fallback |
-| Topic modeling | [BERTopic](https://maartengr.github.io/BERTopic/) (Sentence-Transformers + UMAP + HDBSCAN) → TF-IDF + KMeans fallback |
-| Data handling | pandas, NumPy, scikit-learn |
-| Integrations | Standard-library HTTP adapters with environment-based credentials |
-| Governance | Local JSON registry with atomic writes |
-| Visualization | Plotly, WordCloud, Matplotlib |
-
----
+1. **Evidence stays traceable.** Every insight links back to normalized source records.
+2. **Collection is retry-safe.** Re-running a source must not inflate demand.
+3. **Scores are explainable.** Stakeholders can see and challenge every factor.
+4. **Humans govern actions.** Models recommend; product teams decide.
+5. **Privacy starts at ingestion.** Minimize sensitive data before NLP or export.
+6. **The system degrades gracefully.** A local demo works without a GPU or hosted model.
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT — see [LICENSE](LICENSE).

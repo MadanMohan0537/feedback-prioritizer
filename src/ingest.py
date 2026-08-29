@@ -11,8 +11,20 @@ polling loop against Twitter/Reddit/Zendesk APIs -- nothing downstream of
 import csv
 import time
 from datetime import datetime
+from pathlib import Path
 
 from . import config
+
+
+def load_collected_rows(database_path="data/pulse.db", source="", limit=5000):
+    """Load normalized Collector records for the analysis pipeline."""
+    if not Path(database_path).exists():
+        return []
+    from .collector.storage import FeedbackStore
+
+    records = FeedbackStore(database_path).list(source=source, limit=limit)
+    records.sort(key=lambda row: row["timestamp"])
+    return records
 
 
 def load_feedback_rows(csv_path=None):

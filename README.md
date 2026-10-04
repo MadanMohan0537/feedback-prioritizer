@@ -11,6 +11,19 @@ Pulse is an open, local-first Voice of Customer platform. It collects feedback f
 
 It closes the loop from **customer signal → normalized evidence → insight → priority → release outcome** without hiding decisions behind an unexplained AI score.
 
+## Start with one collection, then inspect the evidence
+
+Use the synthetic-data workflow below before connecting a live source. Review normalized records, duplicates, redacted fields and the data-quality report before interpreting ranked themes.
+
+| Question | Where to look |
+| --- | --- |
+| Which ingestion command should I use? | [CLI](pulse.py) and the collector commands below |
+| What dependencies are required? | [Base requirements](requirements.txt); the larger optional stack is in [requirements-full.txt](requirements-full.txt) |
+| How does collection and analysis work? | [Source modules](src/) |
+| What behavior is covered? | [Tests](tests/) |
+
+A prioritization score reflects the configured rules and observed feedback. It does not measure the needs of customers who never supplied feedback. Keep source coverage and collection windows with any roadmap recommendation.
+
 ## Why Pulse exists
 
 Support tickets, reviews, surveys, communities, and sales conversations each show only part of the customer experience. Copying them into a spreadsheet does not solve the problem: records get duplicated, identities leak, source context disappears, and the loudest anecdote still wins.

@@ -1,34 +1,17 @@
-# Pulse — Feedback Collector & Prioritizer
+# Feedback Prioritizer
 
-> Turn customer noise into a product compass.
-
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
 [![CI](https://github.com/MadanMohan0537/feedback-prioritizer/actions/workflows/ci.yml/badge.svg)](https://github.com/MadanMohan0537/feedback-prioritizer/actions/workflows/ci.yml)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.30%2B-FF4B4B?logo=streamlit&logoColor=white)](https://streamlit.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Pulse is an open, local-first Voice of Customer platform. It collects feedback from disconnected channels, validates and protects it, discovers recurring customer problems, and produces a transparent “work on this first” list.
+**Collect customer feedback from several channels into one local store, redact common contact details in the normalized text, group messages into topics, and rank those topics with a score anyone can read and adjust.**
 
-It closes the loop from **customer signal → normalized evidence → insight → priority → release outcome** without hiding decisions behind an unexplained AI score.
+A local-first Python app with a Streamlit dashboard. The collector command is `python pulse.py`.
 
-## Start with one collection, then inspect the evidence
+## Problem and who it's for
 
-Use the synthetic-data workflow below before connecting a live source. Review normalized records, duplicates, redacted fields and the data-quality report before interpreting ranked themes.
+Support tickets, app-store reviews, surveys, and sales conversations each show only part of the customer experience. Copying them into a spreadsheet does not fix that: records get duplicated, personal details leak, the source context disappears, and the loudest anecdote still wins. This is for product managers, product ops, and customer-experience leads who need a defensible "work on this first" list.
 
-| Question | Where to look |
-| --- | --- |
-| Which ingestion command should I use? | [CLI](pulse.py) and the collector commands below |
-| What dependencies are required? | [Base requirements](requirements.txt); the larger optional stack is in [requirements-full.txt](requirements-full.txt) |
-| How does collection and analysis work? | [Source modules](src/) |
-| What behavior is covered? | [Tests](tests/) |
-
-A prioritization score reflects the configured rules and observed feedback. It does not measure the needs of customers who never supplied feedback. Keep source coverage and collection windows with any roadmap recommendation.
-
-## Why Pulse exists
-
-Support tickets, reviews, surveys, communities, and sales conversations each show only part of the customer experience. Copying them into a spreadsheet does not solve the problem: records get duplicated, identities leak, source context disappears, and the loudest anecdote still wins.
-
-Pulse separates the problem into four layers:
+## Approach
 
 ```mermaid
 flowchart LR
@@ -38,59 +21,73 @@ flowchart LR
     D --> E["Dashboard & outcomes"]
 ```
 
-| Layer | Responsibility | Current implementation |
-|---|---|---|
-| Collector | Fetch, validate, redact, deduplicate, checkpoint, store | SQLite, JSONL, CSV, synthetic, generic JSON, Typeform, Zendesk, Intercom, Apple, Google Play |
-| Analyst | Split opinions, score sentiment, discover topics | RoBERTa/VADER and BERTopic/TF-IDF fallbacks |
-| Decider | Rank issues using explainable business factors | Tunable five-factor score |
-| Bridge | Explore evidence and measure shipped outcomes | Streamlit dashboard, governance registry, release tracking |
+| Layer | What it does |
+|---|---|
+| **Collector** | Fetch records, validate them, redact normalized text, upsert by `(source, external_id)`, store a checkpoint, and write SQLite tables for normalized rows, raw payloads, and dead letters. |
+| **Analyst** | Split a review into opinion units, score sentiment, cluster topics, and flag feature-request phrases. Optional packages add a RoBERTa sentiment model and BERTopic. With `requirements.txt`, sentiment uses VADER and topics use TF-IDF/KMeans. |
+| **Decider** | Rank complaint topics with a five-factor score. The dashboard sliders change the weights, and the weights are rescaled so they sum to 1. |
+| **Governance and outcomes** | Save a topic name, owner, and status. Marking a topic released stores the current average polarity so a later view can show the change. |
 
-## Features
-
-### Reliable collection
-
-- Versioned canonical feedback contract
-- Immutable raw-event capture for replay and debugging
-- Transactional SQLite normalized store
-- Source-specific incremental checkpoints
-- Idempotent `(source, external_id)` upserts
-- Cross-record content hashes
-- Email, phone, and IP-address redaction enabled by default
-- Deterministically pseudonymized user identifiers
-- Dead-letter storage for invalid records
-- JSONL export for downstream tools
-- Synthetic feedback generator for safe demos
-- CSV and JSONL bulk imports
-- Generic JSON API, Typeform, Zendesk, Intercom, Apple App Store, and Google Play adapters
-- Retry and exponential backoff for temporary API failures
-
-### Feedback intelligence
-
-- Aspect-level opinion splitting
-- Transformer sentiment with a VADER fallback
-- BERTopic clustering with a TF-IDF/KMeans fallback
-- Feature-request detection
-- Topic trend and affected-account analysis
-- Persistent topic names, owners, workflow status, and merges
-- Post-release sentiment comparison
-
-### Transparent prioritization
+Default weights from `src/config.py`:
 
 ```text
-priority = 100 × (
-    0.28 × frequency
-  + 0.24 × negativity
-  + 0.20 × business impact
-  + 0.16 × emerging trend
-  + 0.12 × customer value
-)
+priority = 100 × (0.28 × frequency + 0.24 × negativity + 0.20 × business impact
+                  + 0.16 × emerging trend + 0.12 × customer value)
 ```
 
-Every factor is normalized and visible. Product managers can change weights in the dashboard and see the ranking update immediately. Feature requests are separated from complaints so neutral requests are not unfairly suppressed by sentiment.
+Each factor is scaled into 0–1 before weighting. Frequency, business impact, emerging trend, and customer value are min-max scaled across the topics in view. Negativity is `(1 - average polarity) / 2`.
+
+A topic is listed as a feature request when at least 40% of its messages match the phrase list in `src/config.py`. The dashboard orders that list by mention count. Complaint topics stay ordered by the weighted score.
+
+## What exists today
+
+Checked on this tree with Python 3.12.3 and `requirements.txt`:
+
+- Collector commands: `init`, `fetch`, `stats`, `export`, and `delete-user`. `fetch --source` accepts `synthetic`, `file`, `json`, `typeform`, `zendesk`, `intercom`, `apple`, and `google-play`.
+- Those connectors build one `FeedbackEntry`. SQLite enforces `UNIQUE(source, external_id)` and stores a SHA-256 of the normalized text on each row. The same text under another external id is stored again.
+- A second dashboard importer, `src/connectors.py`, can pull JSON for GitHub, Slack, Zendesk, Intercom, and app reviews into the in-memory stream. That path does not write the collector database.
+- Normalized text is scanned for emails, phone numbers, and IPv4 addresses. Non-empty user ids are stored as a salted SHA-256 (`PULSE_HASH_SALT`, or `pulse-local` when unset). `delete-user` removes matching normalized rows.
+- The Streamlit app replays the bundled 650-row synthetic CSV (`data/sample_reviews.csv`), can upload another CSV, and can load rows from the collector SQLite file. Sidebar sliders edit the five weights.
+- 23 unit tests passed (`python -m unittest discover -s tests -p "test_*.py" -v`). `python tests/smoke_test.py` completed: it loaded 650 rows, scored the first 200 with VADER, and fit TF-IDF/KMeans.
+- `python scripts/evaluate.py` on the bundled CSV, with the transformer forced off and BERTopic unavailable, prints:
+
+```json
+{
+  "sentiment": {"rating_proxy_accuracy": 0.431, "rated_sample_count": 775},
+  "topic_model": {
+    "adjusted_rand_index": 0.0376,
+    "normalized_mutual_info": 0.3237,
+    "sample_count": 775
+  }
+}
+```
+
+The 775 rows are opinion units expanded from the 650-row file. Each unit keeps its parent star rating and generated topic label. The rating proxy treats 1–2 stars as negative, 3 as neutral, and 4–5 as positive. Predicted labels use polarity below -0.05 as negative and above 0.05 as positive. The same run reported eight topics, with scores bounded, sorted descending, and accompanied by factor contributions. The unit tests exercise the metric helpers on small fixtures. This run used the fallback models only. GitHub Actions (`.github/workflows/ci.yml`) on Python 3.12 compiles `app.py`, `src`, and `tests`, then runs the unit tests, the smoke test, and this evaluation. The completed run on `main` on 4 October 2026 succeeded.
+
+A local `fetch --source synthetic --count 100` stored 100 rows. Running it again reported 100 duplicates and left the stored count at 100. `export` wrote 100 JSONL rows. `streamlit run app.py` answered HTTP 200 on port 8501.
+
+## How success would be measured
+
+| Measure | Status |
+|---|---|
+| Additional rows stored when the same synthetic source is fetched again | Tested in `tests/test_collector.py`: the stored count does not grow. Not measured on a live vendor feed. |
+| Sentiment and topic quality on a labeled, anonymized sample from a real organization | Not yet measured. The synthetic-data figures are above. |
+| Agreement between product managers and the top-ranked issues | Not yet measured |
+| Sentiment change after a topic is marked released | The dashboard can store a baseline polarity and show a later delta. Not yet measured on real releases. |
+
+## Limitations
+
+- The collector HTTP connectors are implemented and have no unit tests. Tests for `src/connectors.py` check dashboard JSON normalization, including one GitHub issue and one empty Zendesk ticket. They do not call Typeform, Zendesk, Intercom, Apple, or Google Play.
+- Vendor connectors send a token you supply. They do not run an OAuth login flow. Typeform, Zendesk, Intercom, and the generic JSON connector pass the saved cursor on the next request. The Apple App Store and Google Play connectors store a cursor and do not put it in the next request URL.
+- Redaction is a regex over normalized text. Raw payloads in `raw_events`, and connector metadata, are stored as received. There is no command that replays raw events or dead letters. `delete-user` does not delete raw payloads.
+- Each row stores a content hash. A new external id with the same text becomes another row. Grouping of near-duplicate wording is not implemented.
+- A tiny builtin word list is used only when VADER cannot be imported. Opinion splitting is a sentence and contrast-clause heuristic.
+- Default weights and impact keywords live in `src/config.py`. They have not been fit to an organization's outcomes.
+- The database is one local SQLite file. Cloudflare Workers is the intended host, and this repo has no Worker config yet. See Deployment.
 
 ## Quick start
 
-Requirements: Python 3.9 or newer.
+Requires Python 3.10 or newer. `src/collector/storage.py` uses `str | Path` annotations, which are evaluated at import. CI installs `requirements.txt` on Python 3.12. These commands were run with Python 3.12.3.
 
 ```bash
 git clone https://github.com/MadanMohan0537/feedback-prioritizer.git
@@ -98,160 +95,15 @@ cd feedback-prioritizer
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-```
 
-Initialize the collector and generate 100 safe sample records:
-
-```bash
 python pulse.py init
 python pulse.py fetch --source synthetic --count 100
 python pulse.py stats
 python pulse.py export --output exports/feedback.jsonl
-```
-
-Run the dashboard:
-
-```bash
 streamlit run app.py
 ```
 
-Open **Use your own data** in the sidebar and choose **Load collected records** to analyze SQLite data. You can also upload a CSV or replay the bundled 650-row dataset.
-
-## Collector commands
-
-```bash
-# Import CSV or JSONL
-python pulse.py fetch --source file --path data/my_feedback.csv
-
-# Pull a generic API whose records are in an `items` array
-PULSE_API_TOKEN=... python pulse.py fetch \
-  --source json --name community --url https://example.com/api/feedback
-
-# Typeform responses
-TYPEFORM_FORM_ID=... TYPEFORM_TOKEN=... \
-  python pulse.py fetch --source typeform
-
-# Zendesk incremental tickets
-ZENDESK_SUBDOMAIN=... ZENDESK_TOKEN=... \
-  python pulse.py fetch --source zendesk
-
-# Intercom conversations
-INTERCOM_TOKEN=... python pulse.py fetch --source intercom
-
-# App-store reviews (short-lived vendor access tokens)
-APPLE_APP_ID=... APPLE_CONNECT_TOKEN=... python pulse.py fetch --source apple
-GOOGLE_PLAY_PACKAGE=... GOOGLE_PLAY_ACCESS_TOKEN=... \
-  python pulse.py fetch --source google-play
-
-# Filter an export to one source
-python pulse.py export --source zendesk --output exports/zendesk.jsonl
-
-# Honor a deletion request using the stored hashed identifier
-python pulse.py delete-user HASHED_USER_ID
-```
-
-Use cron, a container scheduler, or a workflow runner to invoke `pulse.py fetch`. A checkpoint advances only after the batch has been processed.
-
-## Canonical schema
-
-Every connector returns a `FeedbackEntry`:
-
-```json
-{
-  "id": "internal-uuid",
-  "external_id": "ticket-123",
-  "source": "zendesk",
-  "source_type": "support_ticket",
-  "timestamp": "2026-08-29T12:30:00Z",
-  "ingested_at": "2026-08-29T12:31:12Z",
-  "updated_at": "2026-08-29T12:30:45Z",
-  "user_id": "pseudonymous-sha256",
-  "text": "Export freezes on large files.",
-  "language": "en",
-  "rating": null,
-  "url": "",
-  "product": "analytics",
-  "product_version": "3.4.1",
-  "metadata": {"priority": "high"},
-  "content_hash": "sha256",
-  "schema_version": "1.0"
-}
-```
-
-`external_id` makes retries safe. `content_hash` detects identical text across feeds. `timestamp` records when the customer spoke; `ingested_at` records when Pulse received it.
-
-## Adding a connector
-
-Implement the protocol from `src/collector/connectors/base.py`:
-
-```python
-class MyConnector:
-    name = "my_source"
-
-    def fetch(self, checkpoint=""):
-        records = []
-        # records.append((FeedbackEntry(...), original_payload))
-        return FetchResult(records=records, next_cursor="vendor-cursor")
-```
-
-Pass it through `src.collector.pipeline.collect`. The pipeline handles redaction, user hashing, persistence, run metrics, dead letters, and checkpoint commits.
-
-## Privacy and security
-
-Customer feedback can contain personal or confidential data. Pulse therefore:
-
-- Redacts common emails, phone numbers, and IP addresses before analysis.
-- Hashes source user IDs using `PULSE_HASH_SALT`.
-- Keeps tokens in environment variables rather than code or SQLite.
-- Avoids logging raw feedback.
-- Provides deletion by pseudonymous user ID.
-- Keeps the local database and `.env` out of Git.
-
-Redaction is a safety layer, not a legal guarantee. Pseudonymized records can remain personal data. Before using production data, define a lawful purpose, retention window, access policy, and deletion process appropriate to your organization and jurisdiction.
-
-## Data-quality report
-
-Every collection run prints machine-readable metrics:
-
-```json
-{
-  "source": "synthetic",
-  "fetched": 100,
-  "accepted": 100,
-  "duplicates": 0,
-  "invalid": 0,
-  "redacted": 0,
-  "errors": 0
-}
-```
-
-## Project structure
-
-```text
-feedback-prioritizer/
-├── app.py                       # Streamlit command center
-├── pulse.py                     # Collector CLI entry point
-├── src/
-│   ├── collector/
-│   │   ├── cli.py               # init/fetch/stats/export/delete-user
-│   │   ├── models.py            # canonical FeedbackEntry
-│   │   ├── pipeline.py          # privacy → storage → checkpoint
-│   │   ├── privacy.py           # PII guard and identifier hashing
-│   │   ├── quality.py           # run-quality metrics
-│   │   ├── storage.py           # SQLite/raw/dead-letter storage
-│   │   └── connectors/          # files, synthetic, HTTP vendors
-│   ├── sentiment.py             # sentiment and fallback
-│   ├── topic_model.py           # topic discovery and fallback
-│   ├── opinion_units.py         # multi-aspect splitting
-│   ├── prioritize.py            # explainable ranking
-│   ├── governance.py            # workflow state
-│   └── outcomes.py              # post-release validation
-├── data/sample_reviews.csv
-├── scripts/evaluate.py
-└── tests/
-```
-
-## Testing and evaluation
+Checks:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py" -v
@@ -259,42 +111,23 @@ python tests/smoke_test.py
 python scripts/evaluate.py
 ```
 
-Collector tests cover idempotent reruns, upserts, raw persistence, imports, exports, PII handling, and deletion. Intelligence evaluation reports topic Adjusted Rand Index/NMI, sentiment-proxy accuracy, ranking bounds, ordering, and explanation coverage.
+`requirements-full.txt` adds the optional RoBERTa and BERTopic packages. Those packages were not installed for the numbers above. Source names are listed by `python pulse.py fetch --help`. Credential variable names are in `.env.example`.
 
-Synthetic evaluation is a regression signal—not a substitute for a labeled, anonymized sample from the intended organization.
+## Deployment
 
-## Honest limitations
+Cloudflare Workers is the planned target. Deploy with `npx wrangler deploy`. This repo has no `wrangler.toml`, no Worker entry point, and no Worker name, so that command is not configured yet and nothing is deployed.
 
-- Typeform and Zendesk are initial REST adapters; full multi-tenant OAuth belongs in a service deployment.
-- Lightweight PII detection cannot detect every sensitive phrase.
-- Exact hashing detects identical text, not semantic similarity; embedding-based near-duplicate grouping is planned.
-- Opinion splitting and feature-request detection include heuristic fallbacks.
-- Topic granularity depends on dataset size and clustering parameters.
-- Impact keywords and default weights should be calibrated using organization-specific outcomes.
-- SQLite targets a single-node deployment. Multi-worker production deployments should use a managed database and job queue.
+What is still needed:
 
-## Roadmap
+- `wrangler.toml`
+- a Worker entry point
+- for this Python app, either Cloudflare Python Workers or a JavaScript/TypeScript port
 
-- Typeform webhooks and complete multi-page vendor backfills
-- Reddit/community connectors with policy-aware retention
-- Connector health checks and dead-letter replay
-- Semantic near-duplicate grouping with provenance
-- Language detection and multilingual embeddings
-- Jira/GitHub issue creation with human approval
-- Slack and email reports
-- Background topic-model jobs
-- Learned impact weights from churn, refunds, and adoption
-- Automatic post-release “resolved” detection
+## Related repositories
 
-## Product principles
-
-1. **Evidence stays traceable.** Every insight links back to normalized source records.
-2. **Collection is retry-safe.** Re-running a source must not inflate demand.
-3. **Scores are explainable.** Stakeholders can see and challenge every factor.
-4. **Humans govern actions.** Models recommend; product teams decide.
-5. **Privacy starts at ingestion.** Minimize sensitive data before NLP or export.
-6. **The system degrades gracefully.** A local demo works without a GPU or hosted model.
+- [ai-product-discovery-engine](https://github.com/MadanMohan0537/ai-product-discovery-engine): JavaScript project that turns feedback into evidence-linked opportunities.
+- [product-evidence-to-decision-suite](https://github.com/MadanMohan0537/product-evidence-to-decision-suite): keeps feedback evidence linked from prioritization through experiments and governance.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).
